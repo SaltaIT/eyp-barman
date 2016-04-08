@@ -11,6 +11,15 @@ class barman::params {
       {
         /^6.*$/:
         {
+          $barman_package='barman'
+          $barman_package_require=Class['epel-release']
+
+          $barmanuser='barman'
+          $barmangroup='barman'
+
+          $barmanhome_default='/var/lib/barman'
+          $barmanlog_default='/var/log/barman/barman.log'
+          $barmanconfigdir_default='/etc/barman.d'
         }
         default: { fail("Unsupported RHEL/CentOS version! - ${::operatingsystemrelease}")  }
       }
