@@ -2,7 +2,7 @@
   "name": "eyp-barman",
   "version": "0.1.0",
   "author": "eyp",
-  "summary": null,
+  "summary": "manages barman: backup for postgres",
   "license": "Apache-2.0",
   "source": "https://github.com/AtlasIT-AM/eyp-barman",
   "project_page": null,
