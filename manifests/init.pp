@@ -4,8 +4,8 @@
 #
 class barman(
               #install
-              $sshkey_type,
-              $sshkey_key,
+              $sshkey_type     = undef,
+              $sshkey_key      = undef,
               #config
               $barmanhome      = $barman::params::barmanhome_default,
               $barmanlog       = $barman::params::barmanlog_default,
@@ -14,8 +14,6 @@ class barman(
               #service
               $manage_service  = true,
             ) inherits barman::params{
-
-  include ::epel
 
   class { '::barman::install':
     sshkey_type => $sshkey_type,

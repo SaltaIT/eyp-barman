@@ -12,7 +12,7 @@ class barman::params {
         /^6.*$/:
         {
           $barman_package='barman'
-          $barman_package_require=Class['epel-release']
+          $barman_package_require=Class['epel']
 
           $barmanuser='barman'
           $barmangroup='barman'

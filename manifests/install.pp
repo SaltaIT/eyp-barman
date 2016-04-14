@@ -1,15 +1,19 @@
 class barman::install (
-                        $sshkey_type,
-                        $sshkey_key,
+                        $sshkey_type = undef,
+                        $sshkey_key  = undef,
                       ) inherits barman::params {
 
   package { $barman::params::barman_package:
     require => $barman::params::barman_package_require,
   }
 
-  sshkey { 'barman-key':
-    type => $sshkey_type,
-    key  => $sshkey_key,
+  if($sshkey_type!=undef and $sshkey_key!=undef)
+  {
+    sshkey { 'barman-key':
+      user => $barman::params::$barmanuser,
+      type => $sshkey_type,
+      key  => $sshkey_key,
+      require => Package[$barman::params::barman_package],
+    }
   }
-
 }

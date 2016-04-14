@@ -1,0 +1,7 @@
+[<%= @backupname %>]
+description = "<%= @description %>"
+ssh_command = ssh <%= @user %>@<%= @host %>
+conninfo = host=<%= @host %> user=<%= @user %>
+retention_policy_mode = <%= @retention_policy_mode %>
+retention_policy = RECOVERY WINDOW OF <%= @recovery_window_days %> days
+wal_retention_policy = main
