@@ -7,12 +7,12 @@ class barman(
               $sshkey_type,
               $sshkey_key,
               #config
-              $barmanhome=$barman::params::barmanhome_default,
-              $barmanlog=$barman::params::barmanlog_default,
-              $barmanconfigdir=$barman::params::barmanconfigdir_default,
-              $compression='gzip',
-              $
+              $barmanhome      = $barman::params::barmanhome_default,
+              $barmanlog       = $barman::params::barmanlog_default,
+              $barmanconfigdir = $barman::params::barmanconfigdir_default,
+              $compression     = 'gzip',
               #service
+              $manage_service  = true,
             ) inherits barman::params{
 
   include ::epel
@@ -29,7 +29,9 @@ class barman(
     compression     => $compression,
   } ~>
 
-  class { '::barman::service': } ->
+  class { '::barman::service':
+    manage_service => $manage_service,
+  } ->
 
   Class['::barman']
 
