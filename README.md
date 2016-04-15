@@ -1,5 +1,7 @@
 # barman
 
+![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
+
 #### Table of Contents
 
 1. [Overview](#overview)
@@ -12,69 +14,245 @@
 5. [Reference](#reference)
 5. [Limitations](#limitations)
 6. [Development](#development)
+    * [TODO](#todo)
     * [Contributing](#contributing)
 
 ## Overview
 
-A one-maybe-two sentence summary of what the module does/what problem it solves.
-This is your 30 second elevator pitch for your module. Consider including
-OS/Puppet version it works with.
+Manages pgbarman: backup and recovery manager for PostgreSQL databases.
 
 ## Module Description
 
-If applicable, this section should have a brief description of the technology
-the module integrates with and what that integration enables. This section
-should answer the questions: "What does this module *do*?" and "Why would I use
-it?"
-
-If your module has a range of functionality (installation, configuration,
-management, etc.) this is the time to mention it.
+This module installs barman and configures backups
 
 ## Setup
 
 ### What barman affects
 
-* A list of files, packages, services, or operations that the module will alter,
-  impact, or execute on the system it's installed on.
-* This is a great place to stick any warnings.
-* Can be in list or paragraph form.
+* Installs barman
+* Installs rsync (only if it's no already defined)
+* Configures backups via barman /etc/barman.d (by default)
 
 ### Setup Requirements
 
 Barman needs a bidirectional SSH connection between the barman user on the backup server and the postgres user. SSH must be configured such that there is no password prompt presented when connecting.
 
-```puppet
+It can be done using **eyp-openssh**:
 
+```puppet
+node 'pgm'
+{
+	#.29
+
+	class { 'openssh': }
+	class { 'openssh::server': }
+
+	openssh::privkey { 'postgres':
+		homedir => '/var/lib/pgsql',
+	}
+
+	#[root@agus ~]# cat ~barman/.ssh/id_rsa.pub
+	ssh_authorized_key { 'barman@agus':
+		user => 'postgres',
+		type => 'ssh-rsa',
+		key  => 'AAAAB3NzaC1yc2EAAAABIwAAAQEAx90lzyBtJxIqJqCQAWJvVUM9xLer0NNZRuKUHAirLi5Ygqtfrlt4RmfV2aS6JAw20vFHpQPD9xUpBxn5A9OWfR5dxjye+tPbVktnMHtYq0alzD9z4vnq9/K0VIKLi4UF9xQBPDuvCKC+Vf5eshyy+z/nufKPDWB7Fw7aQibqMgXeroOnKpsjaRUOdvkE0hmaFoqVUoN1h5sNBjbVBiY0oH+MNbovYMhNeSpkJbbxJm1zZd16B6zJwlfEbJuMyLbWkNqZw9GQD9nN4YXvwojN4oK39u88MUZknxqlaBqt4tqJYZWMESYsPKgd1FSMbsbFya9Ynr9zWc9KxHk14GNecw==',
+	}
+
+	#[root@agus ~]# cat /etc/ssh/ssh_host_rsa_key.pub
+	sshkey { '192.168.56.31':
+		ensure       => 'present',
+		key          => 'AAAAB3NzaC1yc2EAAAABIwAAAQEA823ebe7UWj+iFHeOLPZOfDgYdcODKS7U6KQZwvCdTr8H0bnBnrqjpuLtQ5bZ7O/hek+toss9q6QPr0mqqYBPDr1IhmQHHQc76qwiapLeTcj3KOq+T+GSVSY2jVCk/118f+hgamQ7DHQ+JtWm40cpUIWI9rypg8UkCTqWExbnmC7w2uOZHFrWN33gWeZ+KMC3wkjgoIzFMoFyASTqBf1uBFnmMA2sg8nQbxtXFQhYECwLvjMy2DCcTa6watBtIa1DtVPjtU40geko7EgYgrDmEOhQNxNFcFX1Xcbqka5RMHk7McWZ0iHKnc5olEtBmubOui+FXtuB1mOEYL1RjvS20Q==',
+		type         => 'ssh-rsa',
+	}
+
+  (...)
+}
+
+node 'agus'
+{
+	#.31
+
+	class { 'openssh': }
+	class { 'openssh::server': }
+
+	openssh::privkey { 'barman':
+		homedir => '/var/lib/barman',
+	}
+
+	#[root@pgm .ssh]# cat ~postgres/.ssh/id_rsa.pub
+	ssh_authorized_key { 'postgres@pgm':
+	  user => 'barman',
+	  type => 'ssh-rsa',
+	  key  => 'AAAAB3NzaC1yc2EAAAABIwAAAQEAwoUm9uxmm8aocyUMxr6IRPHn9OL4RLULZAKNWbrTjiZ5n+po3zGaeq6QFyLUdl/i7lLnSyQ2SlL2RpWxp/M3sYbPe0cQpW5d9SYDZ9X0AOnzYo+lPD6Fhc8wRwdNGGHCUXV0nIlWdKxje4E3uAeSnUvkgYBbNQd5D11fXDGEiEMLEXpxNUU/osjzSVnW24WCT3RoZCGz9p2zsLcH1EUFIitXMsmayphHGW22Y0rLu0H0diyOJSinsYfQHWfzRPiwsBW6xcgrxQirXz+7vf3o5q7X2urnOmBYZvXc/EHdguo7U9qNbJt8krKLSMV/Ak0+Hm6JSh8fONNZbmLazix1sw==',
+	}
+
+	#[root@pgm .ssh]# cat /etc/ssh/ssh_host_rsa_key.pub
+	sshkey { '192.168.56.29':
+		ensure       => 'present',
+		key          => 'AAAAB3NzaC1yc2EAAAABIwAAAQEA823ebe7UWj+iFHeOLPZOfDgYdcODKS7U6KQZwvCdTr8H0bnBnrqjpuLtQ5bZ7O/hek+toss9q6QPr0mqqYBPDr1IhmQHHQc76qwiapLeTcj3KOq+T+GSVSY2jVCk/118f+hgamQ7DHQ+JtWm40cpUIWI9rypg8UkCTqWExbnmC7w2uOZHFrWN33gWeZ+KMC3wkjgoIzFMoFyASTqBf1uBFnmMA2sg8nQbxtXFQhYECwLvjMy2DCcTa6watBtIa1DtVPjtU40geko7EgYgrDmEOhQNxNFcFX1Xcbqka5RMHk7McWZ0iHKnc5olEtBmubOui+FXtuB1mOEYL1RjvS20Q==',
+		type         => 'ssh-rsa',
+	}
+
+  (...)
+}
 ```
 
 ### Beginning with barman
 
-The very basic steps needed for a user to get the module up and running.
+example environment:
+* pgm contains a postgres instance
+* agus is a barman
 
-If your most recent release breaks compatibility or requires particular steps
-for upgrading, you may wish to include an additional section here: Upgrading
-(For an example, see http://forge.puppetlabs.com/puppetlabs/firewall).
+```puppet
+node 'pgm'
+{
+	#.29
+
+	class { 'openssh': }
+	class { 'openssh::server': }
+
+	openssh::privkey { 'postgres':
+		homedir => '/var/lib/pgsql',
+	}
+
+	#[root@agus ~]# cat ~barman/.ssh/id_rsa.pub
+	ssh_authorized_key { 'barman@agus':
+		user => 'postgres',
+		type => 'ssh-rsa',
+		key  => 'AAAAB3NzaC1yc2EAAAABIwAAAQEAx90lzyBtJxIqJqCQAWJvVUM9xLer0NNZRuKUHAirLi5Ygqtfrlt4RmfV2aS6JAw20vFHpQPD9xUpBxn5A9OWfR5dxjye+tPbVktnMHtYq0alzD9z4vnq9/K0VIKLi4UF9xQBPDuvCKC+Vf5eshyy+z/nufKPDWB7Fw7aQibqMgXeroOnKpsjaRUOdvkE0hmaFoqVUoN1h5sNBjbVBiY0oH+MNbovYMhNeSpkJbbxJm1zZd16B6zJwlfEbJuMyLbWkNqZw9GQD9nN4YXvwojN4oK39u88MUZknxqlaBqt4tqJYZWMESYsPKgd1FSMbsbFya9Ynr9zWc9KxHk14GNecw==',
+	}
+
+	#[root@agus ~]# cat /etc/ssh/ssh_host_rsa_key.pub
+	sshkey { '192.168.56.31':
+		ensure       => 'present',
+		key          => 'AAAAB3NzaC1yc2EAAAABIwAAAQEA823ebe7UWj+iFHeOLPZOfDgYdcODKS7U6KQZwvCdTr8H0bnBnrqjpuLtQ5bZ7O/hek+toss9q6QPr0mqqYBPDr1IhmQHHQc76qwiapLeTcj3KOq+T+GSVSY2jVCk/118f+hgamQ7DHQ+JtWm40cpUIWI9rypg8UkCTqWExbnmC7w2uOZHFrWN33gWeZ+KMC3wkjgoIzFMoFyASTqBf1uBFnmMA2sg8nQbxtXFQhYECwLvjMy2DCcTa6watBtIa1DtVPjtU40geko7EgYgrDmEOhQNxNFcFX1Xcbqka5RMHk7McWZ0iHKnc5olEtBmubOui+FXtuB1mOEYL1RjvS20Q==',
+		type         => 'ssh-rsa',
+	}
+
+	class { 'sysctl': }
+
+	class { 'postgresql':
+		wal_level => 'hot_standby',
+		max_wal_senders => '3',
+		checkpoint_segments => '8',
+		wal_keep_segments => '8',
+		archive_mode => true,
+		archive_command_custom => 'rsync -a %p barman@192.168.56.31:/var/lib/barman/pgm/incoming/%f',
+	}
+
+	postgresql::hba_rule { 'test':
+		user => 'replicator',
+		database => 'replication',
+		address => '192.168.56.0/24',
+	}
+
+	postgresql::hba_rule { 'barman':
+		user => 'postgres',
+		database => 'all',
+		address => '192.168.56.31/32',
+		auth_method => 'trust',
+	}
+
+	postgresql::role { 'replicator':
+		replication => true,
+		password => 'replicatorpassword',
+	}
+
+	postgresql::schema { 'jordi':
+		owner => 'replicator',
+	}
+
+}
+
+node 'agus'
+{
+	#.31
+
+	include ::epel
+
+	class { 'barman':	}
+
+	class { 'openssh': }
+	class { 'openssh::server': }
+
+	openssh::privkey { 'barman':
+		homedir => '/var/lib/barman',
+	}
+
+	#[root@pgm .ssh]# cat ~postgres/.ssh/id_rsa.pub
+	ssh_authorized_key { 'postgres@pgm':
+	  user => 'barman',
+	  type => 'ssh-rsa',
+	  key  => 'AAAAB3NzaC1yc2EAAAABIwAAAQEAwoUm9uxmm8aocyUMxr6IRPHn9OL4RLULZAKNWbrTjiZ5n+po3zGaeq6QFyLUdl/i7lLnSyQ2SlL2RpWxp/M3sYbPe0cQpW5d9SYDZ9X0AOnzYo+lPD6Fhc8wRwdNGGHCUXV0nIlWdKxje4E3uAeSnUvkgYBbNQd5D11fXDGEiEMLEXpxNUU/osjzSVnW24WCT3RoZCGz9p2zsLcH1EUFIitXMsmayphHGW22Y0rLu0H0diyOJSinsYfQHWfzRPiwsBW6xcgrxQirXz+7vf3o5q7X2urnOmBYZvXc/EHdguo7U9qNbJt8krKLSMV/Ak0+Hm6JSh8fONNZbmLazix1sw==',
+	}
+
+	#[root@pgm .ssh]# cat /etc/ssh/ssh_host_rsa_key.pub
+	sshkey { '192.168.56.29':
+		ensure       => 'present',
+		key          => 'AAAAB3NzaC1yc2EAAAABIwAAAQEA823ebe7UWj+iFHeOLPZOfDgYdcODKS7U6KQZwvCdTr8H0bnBnrqjpuLtQ5bZ7O/hek+toss9q6QPr0mqqYBPDr1IhmQHHQc76qwiapLeTcj3KOq+T+GSVSY2jVCk/118f+hgamQ7DHQ+JtWm40cpUIWI9rypg8UkCTqWExbnmC7w2uOZHFrWN33gWeZ+KMC3wkjgoIzFMoFyASTqBf1uBFnmMA2sg8nQbxtXFQhYECwLvjMy2DCcTa6watBtIa1DtVPjtU40geko7EgYgrDmEOhQNxNFcFX1Xcbqka5RMHk7McWZ0iHKnc5olEtBmubOui+FXtuB1mOEYL1RjvS20Q==',
+		type         => 'ssh-rsa',
+	}
+
+	barman::backup { 'pgm':
+		description => 'postgres master',
+		host => '192.168.56.29',
+	}
+}
+```
 
 ## Usage
 
-Put the classes, types, and resources for customizing, configuring, and doing
-the fancy stuff with your module here.
+### basic barman installation
+
+```puppet
+class { 'barman':	}
+```
+
+### backup from a given server
+
+```puppet
+barman::backup { 'pgm':
+  description => 'postgres master',
+  host => '192.168.56.29',
+  recovery_window_days => 30,
+  retention_policy_mode => 'auto',
+}
+```
 
 ## Reference
 
-Here, list the classes, types, providers, facts, etc contained in your module.
-This section should include all of the under-the-hood workings of your module so
-people know what the module is touching on their system but don't need to mess
-with things. (We are working on automating this section!)
+### public classes
+
+* barman
+
+### private classes
+
+* barman::install
+* barman::config
+* barman::service
+* barman::params
+
+### defines
+
+* barman::backup
 
 ## Limitations
 
-This is where you list OS compatibility, version compatibility, etc.
+Tested on CentOS 6 only
 
 ## Development
 
 We are pushing to have acceptance testing in place, so any new feature should
 have some test to check both presence and absence of any feature
+
+### TODO
+
+* Acceptance testing
+* Test it on:
+  * CentOS 5
+  * CentOS 7
+  * Ubuntu 14.04
+
 
 ### Contributing
 
