@@ -10,7 +10,7 @@ class barman(
               $barmanhome       = $barman::params::barmanhome_default,
               $barmanlog        = $barman::params::barmanlog_default,
               $barmanconfigdir  = $barman::params::barmanconfigdir_default,
-              $barmanconfigfile = $barman::params::$barmanconfigfile_default,
+              $barmanconfigfile = $barman::params::barmanconfigfile_default,
               $compression      = 'gzip',
               #service
               $manage_service   = true,
