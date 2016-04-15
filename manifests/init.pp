@@ -25,7 +25,7 @@ class barman(
     barmanhome       => $barmanhome,
     barmanlog        => $barmanlog,
     barmanconfigdir  => $barmanconfigdir,
-    barmanconfigfile => $barmanconfigfile
+    barmanconfigfile => $barmanconfigfile,
     compression      => $compression,
   } ~>
 
