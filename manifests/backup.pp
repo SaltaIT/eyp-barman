@@ -13,7 +13,8 @@ define barman::backup (
     group   => $barman::params::barmangroup,
     mode    => '0644',
     notify  => Class['barman::service'],
-    require => Class['barman::config']
+    require => Class['barman::config'],
+    content => template("${module_name}/backup.erb"),
   }
 
 }
