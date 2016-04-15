@@ -30,7 +30,7 @@ This module installs barman and configures backups
 ### What barman affects
 
 * Installs barman
-* Installs rsync (only if it's no already defined)
+* Installs rsync (only if it's not already defined)
 * Configures backups via barman /etc/barman.d (by default)
 
 ### Setup Requirements
