@@ -3,6 +3,17 @@ class barman::install (
                         $sshkey_key  = undef,
                       ) inherits barman::params {
 
+  if($barman::params::rsync_package!=undef)
+  {
+    if(!defined(Package[$barman::params::rsync_package]))
+    {
+      package { $barman::params::rsync_package:
+        ensure => 'installed',
+        before => Package[$barman::params::barman_package],
+      }
+    }
+  }
+
   package { $barman::params::barman_package:
     require => $barman::params::barman_package_require,
   }

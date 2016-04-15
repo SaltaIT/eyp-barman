@@ -21,6 +21,8 @@ class barman::params {
           $barmanlog_default='/var/log/barman/barman.log'
           $barmanconfigdir_default='/etc/barman.d'
           $barmanconfigfile_default='/etc/barman/barman.conf'
+
+          $rsync_package='rsync'
         }
         default: { fail("Unsupported RHEL/CentOS version! - ${::operatingsystemrelease}")  }
       }
