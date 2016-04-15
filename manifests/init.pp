@@ -12,8 +12,6 @@ class barman(
               $barmanconfigdir  = $barman::params::barmanconfigdir_default,
               $barmanconfigfile = $barman::params::barmanconfigfile_default,
               $compression      = 'gzip',
-              #service
-              $manage_service   = true,
             ) inherits barman::params{
 
   class { '::barman::install':
@@ -30,7 +28,6 @@ class barman(
   } ~>
 
   class { '::barman::service':
-    manage_service => $manage_service,
   } ->
 
   Class['::barman']
