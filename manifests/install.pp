@@ -9,8 +9,8 @@ class barman::install (
 
   if($sshkey_type!=undef and $sshkey_key!=undef)
   {
-    sshkey { 'barman-key':
-      user => $barman::params::$barmanuser,
+    ssh_authorized_key { 'barman-key':
+      user => $barman::params::barmanuser,
       type => $sshkey_type,
       key  => $sshkey_key,
       require => Package[$barman::params::barman_package],

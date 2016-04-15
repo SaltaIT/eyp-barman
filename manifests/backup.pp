@@ -5,7 +5,6 @@ define barman::backup (
                         $retention_policy_mode='auto',
                         $recovery_window_days=30,
                         $user='postgres',
-
                       ) {
   #
   file { "${barman::config::barmanconfigdir}/${backupname}.conf":

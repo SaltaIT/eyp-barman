@@ -41,7 +41,11 @@ management, etc.) this is the time to mention it.
 
 ### Setup Requirements
 
-This module requires pluginsync enabled
+Barman needs a bidirectional SSH connection between the barman user on the backup server and the postgres user. SSH must be configured such that there is no password prompt presented when connecting.
+
+```puppet
+
+```
 
 ### Beginning with barman
 

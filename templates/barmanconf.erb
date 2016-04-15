@@ -14,7 +14,7 @@ barman_user = <%= @barmanuser %>
 log_file = <%= @barmanlog %>
 
 ; Default compression level: possible values are None (default), bzip2, gzip or custom
-;compression = <%= @compression %>
+compression = <%= @compression %>
 
 ; Pre/post backup hook scripts
 ;pre_backup_script = env | grep ^BARMAN
@@ -26,7 +26,7 @@ log_file = <%= @barmanlog %>
 
 ; Directory of configuration files. Place your sections in separate files with .conf extension
 ; For example place the 'main' server section in /etc/barman/conf.dmain.conf
-configuration_files_directory = /etc/barman.d
+configuration_files_directory = <%= @barmanconfigdir %>
 
 ; Minimum number of required backups (redundancy) - default 0
 ;minimum_redundancy = 0
