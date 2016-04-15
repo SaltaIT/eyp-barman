@@ -4,15 +4,16 @@
 #
 class barman(
               #install
-              $sshkey_type     = undef,
-              $sshkey_key      = undef,
+              $sshkey_type      = undef,
+              $sshkey_key       = undef,
               #config
-              $barmanhome      = $barman::params::barmanhome_default,
-              $barmanlog       = $barman::params::barmanlog_default,
-              $barmanconfigdir = $barman::params::barmanconfigdir_default,
-              $compression     = 'gzip',
+              $barmanhome       = $barman::params::barmanhome_default,
+              $barmanlog        = $barman::params::barmanlog_default,
+              $barmanconfigdir  = $barman::params::barmanconfigdir_default,
+              $barmanconfigfile = $barman::params::$barmanconfigfile_default,
+              $compression      = 'gzip',
               #service
-              $manage_service  = true,
+              $manage_service   = true,
             ) inherits barman::params{
 
   class { '::barman::install':
@@ -21,10 +22,11 @@ class barman(
   } ->
 
   class { '::barman::config':
-    barmanhome      => $barmanhome,
-    barmanlog       => $barmanlog,
-    barmanconfigdir => $barmanconfigdir,
-    compression     => $compression,
+    barmanhome       => $barmanhome,
+    barmanlog        => $barmanlog,
+    barmanconfigdir  => $barmanconfigdir,
+    barmanconfigfile => $barmanconfigfile
+    compression      => $compression,
   } ~>
 
   class { '::barman::service':
