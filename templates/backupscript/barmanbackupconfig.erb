@@ -4,12 +4,12 @@ INSTANCE_NAME="<%= @backupname %>"
 <% if defined?(@mailto) -%>
 MAILTO="<%= @mailto %>"
 <% end -%>
-LOGDIR=<% if defined?(@retention) -%>
+LOGDIR=<% if defined?(@logdir) -%>
 RETENTION="<%= @retention %>"
 <% end -%>
 <% if defined?(@idhost) -%>
 IDHOST="<%= @idhost %>"
 <% end -%>
-<% if(@compress) -%>
-COMPRESS="<%= @compress %>"
+<% if(@compress_barmanlogfile) -%>
+COMPRESS="<%= @compress_barmanlogfile %>"
 <% end -%>
