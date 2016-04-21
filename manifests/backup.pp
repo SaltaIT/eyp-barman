@@ -55,7 +55,7 @@ define barman::backup (
 
     if($setcron_notificationscript)
     {
-      cron { "cronjob mysqldump ${name}":
+      cron { "cronjob barman ${backupname}":
         command  => "${notificationscript_basedir}/pgbarmanbackup_${backupname}.sh",
         user     => 'root',
         hour     => $hour_notificationscript,
@@ -66,11 +66,12 @@ define barman::backup (
         require  => File[ [ "${notificationscript_basedir}/pgbarmanbackup_${backupname}.config",
                             "${notificationscript_basedir}/pgbarmanbackup_${backupname}.sh"
                         ] ],
+      }
     }
 
-
   }
-  else {
+  else
+  {
     fail(' - Not implemented - ')
   }
 
