@@ -4,12 +4,8 @@ INSTANCE_NAME="<%= @backupname %>"
 <% if defined?(@mailto) -%>
 MAILTO="<%= @mailto %>"
 <% end -%>
-DESTINATION="<%= @destination %>"
-<% if defined?(@retention) -%>
+LOGDIR=<% if defined?(@retention) -%>
 RETENTION="<%= @retention %>"
-<% end -%>
-<% if defined?(@logdir) -%>
-LOGDIR="<%= @logdir %>"
 <% end -%>
 <% if defined?(@idhost) -%>
 IDHOST="<%= @idhost %>"

@@ -7,12 +7,12 @@ BACKUPTYPE="pgBarman"
 function initbck
 {
 
-	if [ -z "${DESTINATION}" ];
+	if [ -z "${LOGDIR}" ];
 	then
 		echo "no destination defined"
 		BCKFAILED=1
 	else
-		mkdir -p $DESTINATION
+		mkdir -p $LOGDIR
 		BACKUPTS=$(date +%Y%m%d%H%M)
 
 		CURRENTBACKUPLOG="$LOGDIR/$BACKUPTS.log"
@@ -62,7 +62,7 @@ function mailer
 
 function dobackup
 {
-	DUMPDEST="$DESTINATION/$BACKUPTS"
+	DUMPDEST="$LOGDIR/$BACKUPTS"
 
 	mkdir -p $DUMPDEST
 
@@ -87,8 +87,8 @@ function cleanup
 	then
 		echo "cleanup skipped, no RETENTION defined"
 	else
-		find $DESTINATION -type f -mtime +$RETENTION -delete
-		find $DESTINATION -type d -empty -delete
+		find $LOGDIR -type f -mtime +$RETENTION -delete
+		find $LOGDIR -type d -empty -delete
 	fi
 }
 
@@ -98,7 +98,7 @@ function compress
 	then
 		echo "compress skipped"
 	else
-		find $DESTINATION/$BACKUPTS -type f -exec gzip -9 {} \;
+		find $LOGDIR/$BACKUPTS -type f -exec gzip -9 {} \;
 	fi
 }
 
