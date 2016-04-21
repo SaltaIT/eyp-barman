@@ -14,6 +14,13 @@ define barman::backup (
                         $idhost=undef,
                         $compress_barmanlogfile=true,
                         $notificationscript_basedir='/usr/local/bin',
+                        #cron
+                        $hour_notificationscript='2',
+                        $minute_notificationscript='0',
+                        $month_notificationscript=undef,
+                        $monthday_notificationscript=undef,
+                        $weekday_notificationscript=undef,
+                        $setcron_notificationscript=true,
                       ) {
   #
   file { "${barman::config::barmanconfigdir}/${backupname}.conf":
@@ -44,6 +51,21 @@ define barman::backup (
       mode    => '0640',
       require => File["${notificationscript_basedir}/pgbarmanbackup_${backupname}.sh"],
       content => template("${module_name}/backupscript/barmanbackupconfig.erb"),
+    }
+
+    if($setcron_notificationscript)
+    {
+      cron { "cronjob mysqldump ${name}":
+        command  => "${notificationscript_basedir}/pgbarmanbackup_${backupname}.sh",
+        user     => 'root',
+        hour     => $hour_notificationscript,
+        minute   => $minute_notificationscript,
+        month    => $month_notificationscript,
+        monthday => $monthday_notificationscript,
+        weekday  => $weekday_notificationscript,
+        require  => File[ [ "${notificationscript_basedir}/pgbarmanbackup_${backupname}.config",
+                            "${notificationscript_basedir}/pgbarmanbackup_${backupname}.sh"
+                        ] ],
     }
 
 
