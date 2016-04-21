@@ -28,8 +28,8 @@ define barman::backup (
 
   if($use_notificationscript)
   {
-    file { "${notificationscript_basedir}/pgbarmanbackup.${backupname}.sh":
-      file    => $notification_ensure,
+    file { "${notificationscript_basedir}/pgbarmanbackup_${backupname}.sh":
+      ensure  => $notification_ensure,
       owner   => 'root',
       group   => 'root',
       mode    => '0750',
@@ -37,12 +37,12 @@ define barman::backup (
       content => template("${module_name}/backupscript/barmanbackup.erb"),
     }
 
-    file { "${notificationscript_basedir}/pgbarmanbackup.${backupname}.config":
-      file    => $notification_ensure,
+    file { "${notificationscript_basedir}/pgbarmanbackup_${backupname}.config":
+      ensure  => $notification_ensure,
       owner   => 'root',
       group   => 'root',
       mode    => '0640',
-      require => File["${notificationscript_basedir}/pgbarmanbackup.${backupname}.sh"],
+      require => File["${notificationscript_basedir}/pgbarmanbackup_${backupname}.sh"],
       content => template("${module_name}/backupscript/barmanbackupconfig.erb"),
     }
 

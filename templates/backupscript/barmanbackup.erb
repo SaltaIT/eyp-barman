@@ -98,7 +98,12 @@ function compress
 	then
 		echo "compress skipped"
 	else
-		find $LOGDIR/$BACKUPTS -type f -exec gzip -9 {} \;
+    if [ "$COMPRESS" != "false" ];
+    then
+		  find $LOGDIR/$BACKUPTS -type f -exec gzip -9 {} \;
+    else
+      echo "compress disabled"
+    fi
 	fi
 }
 
