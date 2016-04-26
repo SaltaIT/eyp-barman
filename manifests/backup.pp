@@ -5,6 +5,7 @@ define barman::backup (
                         $retention_policy_mode       = 'auto',
                         $recovery_window_days        = '30',
                         $user                        = 'postgres',
+                        $port                        = '5432',
                         $use_notificationscript      = true,
                         #notification script
                         $notification_ensure         = 'present',
