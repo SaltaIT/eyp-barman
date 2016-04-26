@@ -8,7 +8,7 @@ define barman::backup (
                         $use_notificationscript      = true,
                         #notification script
                         $notification_ensure         = 'present',
-                        $logdir                      = undef,
+                        $logdir                      = '/var/log/pgbarmanbackup',
                         $mailto                      = undef,
                         $retention                   = '15',
                         $idhost                      = undef,
