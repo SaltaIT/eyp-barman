@@ -5,10 +5,10 @@ _operatingsystemrelease = fact('operatingsystemrelease').to_f
 
 case _osfamily
 when 'RedHat'
-  $examplevar = 'valrh'
+  $packagename = 'barman'
 
 when 'Debian'
-  $examplevar = 'valdeb'
+  $packagename = 'barman'
 
 else
   $examplevar = '-_-'
