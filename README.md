@@ -292,7 +292,6 @@ have some test to check both presence and absence of any feature
 
 ### TODO
 
-* Acceptance testing
 * Support for:
   * CentOS 5
   * CentOS 7
