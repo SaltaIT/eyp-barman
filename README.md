@@ -23,7 +23,10 @@ Manages pgbarman: backup and recovery manager for PostgreSQL databases.
 
 ## Module Description
 
-This module installs barman and configures backups
+This module installs barman and configures backups.
+
+Limitations:
+* It does **NOT** support slave backups
 
 ## Setup
 
@@ -200,6 +203,21 @@ node 'agus'
 }
 ```
 
+sample yaml setup:
+
+```yaml
+---
+classes:
+  - barman
+  - epel
+barmanbackups:
+  pgm:
+    description: postgres master
+    host: 192.168.56.20
+    port: 60901
+    mailto: backup_reports@systemadmin.es
+```
+
 ## Usage
 
 ### basic barman installation
@@ -223,18 +241,45 @@ barman::backup { 'pgm':
 
 ### public classes
 
-* barman
+#### barman
+
+(...)
 
 ### private classes
 
-* barman::install
-* barman::config
-* barman::service
-* barman::params
+* **barman::install**: setups packages and ssh keys
+* **barman::config**: configuration files
+* **barman::service**: barman cron job, not and actual service
+* **barman::params**: default variables and OS checking
 
 ### defines
 
-* barman::backup
+#### barman::backup
+
+* backup configuration:
+  * **description**: backup description
+  * **host**: hostname
+  * **backupname**: backup name (default: resource's name )
+  * **retention_policy_mode**: Currently only "auto" is implemented. Global/Server. (default: auto)
+  * **recovery_window_days**: recovery window retention policy use "RECOVERY WINDOW OF i DAYS" where i is a positive integer representing, specifically, the number of days (default: 30)
+  * **user**: user to connect to the remote host (default: postgres)
+  * **port**: db port (default: 5432)
+  * **use_notificationscript**: use warper script for email notifications (default: true)
+* notification script (**use_notificationscript** must be set to true)
+  * **notification_ensure**: presence of this script *present*/*absent* (default: present)
+  * **logdir**: directory to keep logs (default: /var/log/pgbarmanbackup)
+  * **mailto**: email to notify (default: undef)
+  * **idhost**: Alternate name for the host, if set to undef, uses host's short hostname (default: undef)
+  * **retention**: (default: 15)
+  * **compress_barmanlogfile**: compression for log files (default: true)
+  * **notificationscript_basedir**: Notification script installation path (default: /usr/local/bin)
+* cronjob (**use_notificationscript**: must be set to true)
+  * **hour_notificationscript**: hour (default: 2)
+  * **minute_notificationscript**: minute (default: 0)
+  * **month_notificationscript**: month (default: undef)
+  * **monthday_notificationscript**: monthday (default: undef)
+  * **weekday_notificationscript**: weekday (default: undef)
+  * **setcron_notificationscript**: enable or disable cronjob (default: true)
 
 ## Limitations
 
@@ -248,7 +293,7 @@ have some test to check both presence and absence of any feature
 ### TODO
 
 * Acceptance testing
-* Test it on:
+* Support for:
   * CentOS 5
   * CentOS 7
   * Ubuntu 14.04
