@@ -9,6 +9,8 @@ describe 'barman class' do
     it 'should work with no errors' do
       pp = <<-EOF
 
+      include ::epel
+
       class { 'barman': }
 
       barman::backup { 'pgm':
@@ -31,6 +33,38 @@ describe 'barman class' do
 
     it "crontab pgm" do
       expect(shell("crontab -l | grep pgm").exit_code).to be_zero
+    end
+
+    # /etc/barman/barman.conf
+    describe file($barmanconf) do
+      it { should be_file }
+      its(:content) { should match 'puppet managed file' }
+      its(:content) { should match 'configuration_files_directory = /etc/barman.d' }
+      its(:content) { should match 'log_file = /var/log/barman/barman.log' }
+      its(:content) { should match 'barman_user = barman' }
+      its(:content) { should match 'barman_home = /var/lib/barman' }
+    end
+
+    # /etc/barman.d/pgm.conf
+    describe file($barmanpgm) do
+      it { should be_file }
+      its(:content) { should match 'puppet managed file' }
+      its(:content) { should match '[pgm]' }
+      its(:content) { should match 'retention_policy = RECOVERY WINDOW OF 30 days' }
+      its(:content) { should match 'host=192.168.56.29' }
+      its(:content) { should match 'user=postgres' }
+      its(:content) { should match 'port=60901' }
+      its(:content) { should match 'description = "postgres master"' }
+    end
+
+    # barman list-server | grep pgm
+    it "crontab pgm" do
+      expect(shell("barman list-server | grep pgm").exit_code).to be_zero
+    end
+
+    # barman show-server pgm | grep -i 'active: True'
+    it "crontab pgm" do
+      expect(shell("barman show-server pgm | grep -i 'active: True'").exit_code).to be_zero
     end
 
   end
