@@ -34,7 +34,7 @@ Limitations:
 
 * Installs barman
 * Installs rsync (only if it's no already defined)
-* Configures backups via barman /etc/barman.d (by default)
+* Configures backups via barman **/etc/barman.d** (by default)
 
 ### Setup Requirements
 
