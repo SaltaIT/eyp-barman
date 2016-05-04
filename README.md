@@ -38,6 +38,14 @@ Limitations:
 
 ### Setup Requirements
 
+On CentOS and RHEL systems you must install **eyp-epel**:
+
+```puppet
+include ::epel
+
+class { 'barman':	}
+```
+
 Barman needs a bidirectional SSH connection between the barman user on the backup server and the postgres user. SSH must be configured such that there is no password prompt presented when connecting.
 
 It can be done using **eyp-openssh**:
