@@ -4,9 +4,9 @@
   "author": "eyp",
   "summary": "manages barman: backup for postgres",
   "license": "Apache-2.0",
-  "source": "https://github.com/AtlasIT-AM/eyp-barman",
+  "source": "https://github.com/NTTCom-MS/eyp-barman",
   "project_page": null,
-  "issues_url": "https://github.com/AtlasIT-AM/eyp-barman/issues",
+  "issues_url": "https://github.com/NTTCom-MS/eyp-barman/issues",
   "dependencies": [
     {"name":"puppetlabs/stdlib","version_requirement":">= 1.0.0"},
     {"name":"puppetlabs/concat","version_requirement":">= 1.2.3"},
