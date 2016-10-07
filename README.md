@@ -33,10 +33,18 @@ Limitations:
 ### What barman affects
 
 * Installs barman
-* Installs rsync (only if it's not already defined)
-* Configures backups via barman /etc/barman.d (by default)
+* Installs rsync (only if it's no already defined)
+* Configures backups via barman **/etc/barman.d** (by default)
 
 ### Setup Requirements
+
+On CentOS and RHEL systems you must install **eyp-epel**:
+
+```puppet
+include ::epel
+
+class { 'barman':	}
+```
 
 Barman needs a bidirectional SSH connection between the barman user on the backup server and the postgres user. SSH must be configured such that there is no password prompt presented when connecting.
 

@@ -20,7 +20,7 @@ class barman::params {
           $barmanhome_default='/var/lib/barman'
           $barmanlog_default='/var/log/barman/barman.log'
           $barmanconfigdir_default='/etc/barman.d'
-          $barmanconfigfile_default='/etc/barman/barman.conf'
+          $barmanconfigfile_default='/etc/barman.conf'
 
           $rsync_package='rsync'
         }
