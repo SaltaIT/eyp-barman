@@ -9,7 +9,7 @@ class barman::params {
     {
       case $::operatingsystemrelease
       {
-        /^6.*$/:
+        /^[67].*$/:
         {
           $barman_package='barman'
           $barman_package_require=Class['epel']
