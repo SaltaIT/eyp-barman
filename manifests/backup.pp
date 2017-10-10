@@ -7,7 +7,7 @@ define barman::backup (
                         $user                        = 'postgres',
                         $port                        = '5432',
                         $use_notificationscript      = true,
-                        #notification script
+                        # notification script
                         $notification_ensure         = 'present',
                         $logdir                      = '/var/log/pgbarmanbackup',
                         $mailto                      = undef,
@@ -15,7 +15,7 @@ define barman::backup (
                         $idhost                      = undef,
                         $compress_barmanlogfile      = true,
                         $notificationscript_basedir  = '/usr/local/bin',
-                        #cron
+                        # cron
                         $hour_notificationscript     = '2',
                         $minute_notificationscript   = '0',
                         $month_notificationscript    = undef,
