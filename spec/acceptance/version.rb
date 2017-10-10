@@ -6,7 +6,7 @@ _operatingsystemrelease = fact('operatingsystemrelease').to_f
 case _osfamily
 when 'RedHat'
   $packagename = 'barman'
-  $barmanconf = '/etc/barman/barman.conf'
+  $barmanconf = '/etc/barman.conf'
   $barmanpgm = '/etc/barman.d/pgm.conf'
 
 when 'Debian'
