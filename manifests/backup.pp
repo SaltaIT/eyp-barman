@@ -16,6 +16,7 @@ define barman::backup (
                         $compress_barmanlogfile      = true,
                         $notificationscript_basedir  = '/usr/local/bin',
                         # cron
+                        $cron_ensure                 = 'present', # @param cron_ensure Whether the cronjob should be present or not. (default: present)
                         $hour_notificationscript     = '2',
                         $minute_notificationscript   = '0',
                         $month_notificationscript    = undef,
@@ -57,6 +58,7 @@ define barman::backup (
     if($setcron_notificationscript)
     {
       cron { "cronjob barman ${backupname}":
+        ensure   => $cron_ensure,
         command  => "${notificationscript_basedir}/pgbarmanbackup_${backupname}.sh",
         user     => 'root',
         hour     => $hour_notificationscript,
