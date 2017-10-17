@@ -15,6 +15,7 @@ define barman::backup (
                         $idhost                      = undef,
                         $compress_barmanlogfile      = true,
                         $notificationscript_basedir  = '/usr/local/bin',
+                        $backup_type                 = 'pgBarman', # @param backup_type Backup ID for barman backups (default: pgBarman)
                         # cron
                         $cron_ensure                 = 'present', # @param cron_ensure Whether the cronjob should be present or not. (default: present)
                         $hour_notificationscript     = '2',
