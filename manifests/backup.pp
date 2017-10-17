@@ -71,11 +71,5 @@ define barman::backup (
                         ] ],
       }
     }
-
   }
-  else
-  {
-    fail(' - Not implemented - ')
-  }
-
 }
