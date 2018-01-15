@@ -54,14 +54,6 @@ define barman::backup (
       }
     }
 
-    file { "${notificationscript_basedir}/exportfullbarman_${backupname}.config":
-      ensure  => $notification_ensure,
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0640',
-      content => template("${module_name}/exportfull/exportfullconfig.erb"),
-    }
-
     $export_action = "${notificationscript_basedir}/exportfullbarman.sh ${notificationscript_basedir}/exportfullbarman_${backupname}.config"
 
     if($export_full_disk!=undef)
@@ -71,6 +63,14 @@ define barman::backup (
     else
     {
       $exportdir = $export_full_tmpdir
+    }
+
+    file { "${notificationscript_basedir}/exportfullbarman_${backupname}.config":
+      ensure  => $notification_ensure,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0640',
+      content => template("${module_name}/exportfull/exportfullconfig.erb"),
     }
   }
 
