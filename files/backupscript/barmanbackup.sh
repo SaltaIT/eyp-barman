@@ -2,18 +2,25 @@
 
 function initbck
 {
+
 	if [ -z "${LOGDIR}" ];
 	then
-		exec 2>&1
+		echo "no destination defined"
+		BCKFAILED=1
 	else
 		mkdir -p $LOGDIR
 		BACKUPTS=$(date +%Y%m%d%H%M)
 
-		CURRENTBACKUPLOG="$LOGDIR/exportfull_$BACKUPTS.log"
+		CURRENTBACKUPLOG="$LOGDIR/$BACKUPTS.log"
 
 		BCKFAILED=0
 
-		exec >> $CURRENTBACKUPLOG 2>&1
+		if [ -z "$LOGDIR" ];
+		then
+			exec 2>&1
+		else
+			exec >> $CURRENTBACKUPLOG 2>&1
+		fi
 	fi
 }
 
