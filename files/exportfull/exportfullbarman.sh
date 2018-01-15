@@ -91,3 +91,5 @@ fi
 init
 doexport
 cleanup
+
+exit $BCKFAILED
