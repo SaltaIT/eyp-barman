@@ -42,7 +42,7 @@ function mailer
 				then
 					echo "OK" | $MAILCMD -s "$IDHOST-${BACKUPTYPE}-OK" $MAILTO
 				else
-					echo "ERROR - no log file configured" | $MAILCMD -s "$IDHOST-MySQL-ERROR" $MAILTO
+					echo "ERROR - no log file configured" | $MAILCMD -s "${IDHOST}-${BACKUPTYPE}-ERROR" $MAILTO
 				fi
 			else
 				if [ "$BCKFAILED" -eq 0 ];
