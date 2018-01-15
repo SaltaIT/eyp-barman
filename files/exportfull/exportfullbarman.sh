@@ -51,6 +51,17 @@ function doexport
     echo "invalid tar"
     BCKFAILED=1
   fi
+
+  if [ ! -z "${S3BUCKET}" ];
+  then
+    $AWSBIN s3 cp ${EXPORTDIR}/export_barman_${BACKUPTS}.tgz ${S3BUCKET}/export_barman_${BACKUPTS}.tgz
+
+    if [ "$?" -ne 0 ];
+    then
+      echo "s3 upload failed"
+      BCKFAILED=1
+    fi
+  fi
 }
 
 function cleanup
@@ -61,7 +72,14 @@ function cleanup
 	else
 		find $LOGDIR -iname export_barman_\*.log -type f -mtime +$EXPORTRETENTION -delete
 		find $LOGDIR -type d -empty -delete
-    find $EXPORTDIR -iname export_barman_\*.tgz -type f -mtime +$EXPORTRETENTION -delete
+    for i in $(find $EXPORTDIR -iname export_barman_\*.tgz -type f -mtime +$EXPORTRETENTION);
+    do
+      rm -f $i
+      if [ ! -z "${S3BUCKET}" ];
+      then
+        $AWSBIN s3 rm ${S3BUCKET}/$(basename $i)
+      fi
+    done
 	fi
 }
 
@@ -86,6 +104,17 @@ if [ -z "$BARMANBIN" ];
 then
 	echo "barman not found"
 	BCKFAILED=1
+fi
+
+if [ ! -z "${S3BUCKET}" ];
+then
+  AWSBIN=${AWSBIN-$(which aws 2>/dev/null)}
+  if [ -z "$AWSBIN" ];
+  then
+  	echo "aws not found"
+  	BCKFAILED=1
+  fi
+
 fi
 
 init
