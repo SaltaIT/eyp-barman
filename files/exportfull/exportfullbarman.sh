@@ -2,11 +2,9 @@
 
 function init
 {
-
 	if [ -z "${LOGDIR}" ];
 	then
 		echo "no log destination defined"
-		BCKFAILED=1
 	else
 		mkdir -p $LOGDIR
 		BACKUPTS=$(date +%Y%m%d%H%M)
@@ -15,12 +13,7 @@ function init
 
 		BCKFAILED=0
 
-		if [ -z "$LOGDIR" ];
-		then
-			exec 2>&1
-		else
-			exec >> $CURRENTBACKUPLOG 2>&1
-		fi
+    exec >> $CURRENTBACKUPLOG 2>&1
 	fi
 }
 
