@@ -71,7 +71,7 @@ define barman::backup (
     }
     else
     {
-      $exportdir = $export_full_tmpdir,
+      $exportdir = $export_full_tmpdir
     }
   }
 
