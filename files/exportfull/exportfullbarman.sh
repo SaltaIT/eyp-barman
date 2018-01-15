@@ -37,6 +37,20 @@ function doexport
     echo "export error, check logs"
     BCKFAILED=1
   fi
+
+  if [ -s "${EXPORTDIR}/export_barman_${BACKUPTS}.tgz" ];
+  then
+    echo "error: empty tar"
+    BCKFAILED=1
+  fi
+
+  tar tf ${EXPORTDIR}/export_barman_${BACKUPTS}.tgz
+
+  if [ "$?" -ne 0 ];
+  then
+    echo "invalid tar"
+    BCKFAILED=1
+  fi
 }
 
 function cleanup
