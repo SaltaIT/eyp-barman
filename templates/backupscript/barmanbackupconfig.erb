@@ -13,3 +13,6 @@ IDHOST="<%= @idhost %>"
 COMPRESS="<%= @compress_barmanlogfile %>"
 <% end -%>
 BACKUPTYPE="<%= @backup_type %>"
+<% if defined?(@export_action) -%>
+EXPORT_ACTION="<%= @export_action %>"
+<% end -%>

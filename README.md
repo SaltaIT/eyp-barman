@@ -238,12 +238,30 @@ class { 'barman':	}
 
 ```puppet
 barman::backup { 'pgm':
-  description => 'postgres master',
-  host => '192.168.56.29',
-  recovery_window_days => 30,
+  description           => 'postgres master',
+  host                  => '192.168.56.29',
+  recovery_window_days  => 30,
   retention_policy_mode => 'auto',
 }
 ```
+
+### barman export
+
+```puppet
+barman::backup { 'pgm':
+  description           => 'postgres master',
+  host                  => '192.168.56.29',
+  recovery_window_days  => 30,
+  retention_policy_mode => 'auto',
+  export_full_disk      => '/backup/barman_export',
+}
+```
+
+#### restore from barman exported file
+
+* extract file
+* create recovery.conf file on the extracted folder  
+* set the restore_command parameter to 'rsync -a /path/to/wals/%f %p'
 
 ## Reference
 
@@ -291,7 +309,7 @@ barman::backup { 'pgm':
 
 ## Limitations
 
-Tested on CentOS 6 only
+Tested on CentOS
 
 ## Development
 
@@ -301,10 +319,7 @@ have some test to check both presence and absence of any feature
 ### TODO
 
 * Support for:
-  * CentOS 5
-  * CentOS 7
-  * Ubuntu 14.04
-
+  * Ubuntu
 
 ### Contributing
 

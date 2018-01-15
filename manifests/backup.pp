@@ -24,8 +24,13 @@ define barman::backup (
                         $monthday_notificationscript = undef,
                         $weekday_notificationscript  = undef,
                         $setcron_notificationscript  = true,
+                        $export_full_s3              = undef,
+                        $export_full_disk            = undef,
+                        $export_full_tmpdir          = '/var/lib/export_barman',
+                        $export_retention            = '1',
                       ) {
-  #
+  include ::barman
+
   file { "${barman::config::barmanconfigdir}/${backupname}.conf":
     ensure  => 'present',
     owner   => $barman::params::barmanuser,
@@ -36,6 +41,40 @@ define barman::backup (
     content => template("${module_name}/backup.erb"),
   }
 
+  if($export_full_s3!=undef or $export_full_disk!=undef)
+  {
+    if(!defined(File["${notificationscript_basedir}/exportfullbarman.sh"]))
+    {
+      file { "${notificationscript_basedir}/exportfullbarman.sh":
+        ensure  => 'present',
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0750',
+        content => file("${module_name}/exportfull/exportfullbarman.sh"),
+      }
+    }
+
+    file { "${notificationscript_basedir}/exportfullbarman_${backupname}.config":
+      ensure  => $notification_ensure,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0640',
+      require => File["${notificationscript_basedir}/pgbarmanbackup_${backupname}.sh"],
+      content => template("${module_name}/backupscript/barmanbackupconfig.erb"),
+    }
+
+    $export_action = "${notificationscript_basedir}/exportfullbarman.sh ${notificationscript_basedir}/exportfullbarman_${backupname}.config"
+
+    if($export_full_disk!=undef)
+    {
+      $exportdir = $export_full_disk
+    }
+    else
+    {
+      $exportdir = $export_full_tmpdir,
+    }
+  }
+
   if($use_notificationscript)
   {
     file { "${notificationscript_basedir}/pgbarmanbackup_${backupname}.sh":
@@ -44,7 +83,7 @@ define barman::backup (
       group   => 'root',
       mode    => '0750',
       require => File["${barman::config::barmanconfigdir}/${backupname}.conf"],
-      content => template("${module_name}/backupscript/barmanbackup.erb"),
+      content => file("${module_name}/backupscript/barmanbackup.sh"),
     }
 
     file { "${notificationscript_basedir}/pgbarmanbackup_${backupname}.config":

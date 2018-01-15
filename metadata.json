@@ -1,6 +1,6 @@
 {
   "name": "eyp-barman",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "author": "eyp",
   "summary": "manages barman: backup for postgres",
   "license": "Apache-2.0",
@@ -41,7 +41,7 @@
   "requirements": [
     {
       "name": "puppet",
-      "version_requirement": ">= 3.0.0"
+      "version_requirement": ">= 3.8.0"
     }
   ]
 }

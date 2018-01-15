@@ -1,28 +1,19 @@
 #!/bin/bash
 
-#TODO: custom conf
-
 function initbck
 {
-
 	if [ -z "${LOGDIR}" ];
 	then
-		echo "no destination defined"
-		BCKFAILED=1
+		exec 2>&1
 	else
 		mkdir -p $LOGDIR
 		BACKUPTS=$(date +%Y%m%d%H%M)
 
-		CURRENTBACKUPLOG="$LOGDIR/$BACKUPTS.log"
+		CURRENTBACKUPLOG="$LOGDIR/exportfull_$BACKUPTS.log"
 
 		BCKFAILED=0
 
-		if [ -z "$LOGDIR" ];
-		then
-			exec 2>&1
-		else
-			exec >> $CURRENTBACKUPLOG 2>&1
-		fi
+		exec >> $CURRENTBACKUPLOG 2>&1
 	fi
 }
 
@@ -75,6 +66,18 @@ function dobackup
 		then
 			echo "barman error, check logs"
 			BCKFAILED=1
+		else
+			if [ ! -z "${EXPORT_ACTION}" ];
+			then
+				echo "export action:" > ${DUMPDEST}/barman.log 2>&1
+				${EXPORT_ACTION} > ${DUMPDEST}/barman.log 2>&1
+
+				if [ "$?" -ne 0 ];
+				then
+					echo "export error, check logs"
+					BCKFAILED=1
+				fi
+			fi
 		fi
 	fi
 }
