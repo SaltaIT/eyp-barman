@@ -11,7 +11,18 @@ describe 'barman class' do
 
       include ::epel
 
-      class { 'barman': }
+      class { 'postgresql':
+    		wal_level         => 'hot_standby',
+    		max_wal_senders   => '3',
+    		wal_keep_segments => '8',
+    		version           => '9.6',
+    	}
+
+      ->
+
+      class { 'barman':
+        require Class['epel'],
+      }
 
       barman::backup { 'pgm':
         description => 'postgres master',
