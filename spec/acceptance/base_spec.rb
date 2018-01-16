@@ -16,6 +16,10 @@ describe 'barman class' do
     		max_wal_senders   => '3',
     		wal_keep_segments => '8',
     		version           => '9.6',
+        archive_mode      => true,
+        archive_dir       => '/var/lib/barman/gbm/incoming',
+        archive_dir_mode  => '0666',
+        archive_dir_chmod => '0666',
     	}
 
       ->
