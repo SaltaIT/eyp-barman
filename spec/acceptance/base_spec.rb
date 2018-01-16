@@ -21,7 +21,7 @@ describe 'barman class' do
       ->
 
       class { 'barman':
-        require Class['epel'],
+        require => Class['::epel'],
       }
 
       barman::backup { 'pgm':
