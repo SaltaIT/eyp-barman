@@ -1,0 +1,9 @@
+<% if(@backupname) -%>
+INSTANCE_NAME="<%= @backupname %>"
+<% end -%>
+LOGDIR="<%= @logdir %>"
+EXPORTDIR="<%= @exportdir %>"
+EXPORTRETENTION="<%= @export_retention %>"
+<% if defined?(@export_full_s3) -%>
+S3BUCKET="<%= @export_full_s3 %>"
+<% end -%>

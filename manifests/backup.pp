@@ -7,7 +7,7 @@ define barman::backup (
                         $user                        = 'postgres',
                         $port                        = '5432',
                         $use_notificationscript      = true,
-                        #notification script
+                        # notification script
                         $notification_ensure         = 'present',
                         $logdir                      = '/var/log/pgbarmanbackup',
                         $mailto                      = undef,
@@ -15,15 +15,22 @@ define barman::backup (
                         $idhost                      = undef,
                         $compress_barmanlogfile      = true,
                         $notificationscript_basedir  = '/usr/local/bin',
-                        #cron
+                        $backup_type                 = 'pgBarman', # @param backup_type Backup ID for barman backups (default: pgBarman)
+                        # cron
+                        $cron_ensure                 = 'present', # @param cron_ensure Whether the cronjob should be present or not. (default: present)
                         $hour_notificationscript     = '2',
                         $minute_notificationscript   = '0',
                         $month_notificationscript    = undef,
                         $monthday_notificationscript = undef,
                         $weekday_notificationscript  = undef,
                         $setcron_notificationscript  = true,
+                        $export_full_s3              = undef,
+                        $export_full_disk            = undef,
+                        $export_full_tmpdir          = '/var/lib/export_barman',
+                        $export_retention            = '1',
                       ) {
-  #
+  include ::barman
+
   file { "${barman::config::barmanconfigdir}/${backupname}.conf":
     ensure  => 'present',
     owner   => $barman::params::barmanuser,
@@ -34,6 +41,39 @@ define barman::backup (
     content => template("${module_name}/backup.erb"),
   }
 
+  if($export_full_s3!=undef or $export_full_disk!=undef)
+  {
+    if(!defined(File["${notificationscript_basedir}/exportfullbarman.sh"]))
+    {
+      file { "${notificationscript_basedir}/exportfullbarman.sh":
+        ensure  => 'present',
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0750',
+        content => file("${module_name}/exportfull/exportfullbarman.sh"),
+      }
+    }
+
+    $export_action = "${notificationscript_basedir}/exportfullbarman.sh ${notificationscript_basedir}/exportfullbarman_${backupname}.config"
+
+    if($export_full_disk!=undef)
+    {
+      $exportdir = $export_full_disk
+    }
+    else
+    {
+      $exportdir = $export_full_tmpdir
+    }
+
+    file { "${notificationscript_basedir}/exportfullbarman_${backupname}.config":
+      ensure  => $notification_ensure,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0640',
+      content => template("${module_name}/exportfull/exportfullconfig.erb"),
+    }
+  }
+
   if($use_notificationscript)
   {
     file { "${notificationscript_basedir}/pgbarmanbackup_${backupname}.sh":
@@ -42,7 +82,7 @@ define barman::backup (
       group   => 'root',
       mode    => '0750',
       require => File["${barman::config::barmanconfigdir}/${backupname}.conf"],
-      content => template("${module_name}/backupscript/barmanbackup.erb"),
+      content => file("${module_name}/backupscript/barmanbackup.sh"),
     }
 
     file { "${notificationscript_basedir}/pgbarmanbackup_${backupname}.config":
@@ -57,6 +97,7 @@ define barman::backup (
     if($setcron_notificationscript)
     {
       cron { "cronjob barman ${backupname}":
+        ensure   => $cron_ensure,
         command  => "${notificationscript_basedir}/pgbarmanbackup_${backupname}.sh",
         user     => 'root',
         hour     => $hour_notificationscript,
@@ -69,11 +110,5 @@ define barman::backup (
                         ] ],
       }
     }
-
   }
-  else
-  {
-    fail(' - Not implemented - ')
-  }
-
 }

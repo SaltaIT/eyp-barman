@@ -1,9 +1,5 @@
 #!/bin/bash
 
-#TODO: custom conf
-
-BACKUPTYPE="pgBarman"
-
 function initbck
 {
 
@@ -46,7 +42,7 @@ function mailer
 				then
 					echo "OK" | $MAILCMD -s "$IDHOST-${BACKUPTYPE}-OK" $MAILTO
 				else
-					echo "ERROR - no log file configured" | $MAILCMD -s "$IDHOST-MySQL-ERROR" $MAILTO
+					echo "ERROR - no log file configured" | $MAILCMD -s "${IDHOST}-${BACKUPTYPE}-ERROR" $MAILTO
 				fi
 			else
 				if [ "$BCKFAILED" -eq 0 ];
@@ -77,6 +73,18 @@ function dobackup
 		then
 			echo "barman error, check logs"
 			BCKFAILED=1
+		else
+			if [ ! -z "${EXPORT_ACTION}" ];
+			then
+				echo "export action:" > ${DUMPDEST}/barman.log 2>&1
+				${EXPORT_ACTION} > ${DUMPDEST}/barman.log 2>&1
+
+				if [ "$?" -ne 0 ];
+				then
+					echo "export error, check logs"
+					BCKFAILED=1
+				fi
+			fi
 		fi
 	fi
 }
