@@ -143,10 +143,6 @@ then
 	BCKFAILED=1
 fi
 
-#
-#
-#
-
 initbck
 
 if [ "$BCKFAILED" -ne 1 ];
