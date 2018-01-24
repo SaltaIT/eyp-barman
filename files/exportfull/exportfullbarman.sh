@@ -2,19 +2,19 @@
 
 function init
 {
-	if [ -z "${LOGDIR}" ];
-	then
-		echo "no log destination defined"
-	else
-		mkdir -p $LOGDIR
-		BACKUPTS=$(date +%Y%m%d%H%M)
+  if [ -z "${LOGDIR}" ];
+  then
+    echo "no log destination defined"
+  else
+    mkdir -p $LOGDIR
+    BACKUPTS=$(date +%Y%m%d%H%M)
 
-		CURRENTBACKUPLOG="$LOGDIR/export_barman_$BACKUPTS.log"
+    CURRENTBACKUPLOG="$LOGDIR/export_barman_$BACKUPTS.log"
 
-		BCKFAILED=0
+    BCKFAILED=0
 
     exec >> $CURRENTBACKUPLOG 2>&1
-	fi
+  fi
 }
 
 function doexport
@@ -38,7 +38,7 @@ function doexport
     BCKFAILED=1
   fi
 
-  if [ -s "${EXPORTDIR}/export_barman_${BACKUPTS}.tgz" ];
+  if [ ! -s "${EXPORTDIR}/export_barman_${BACKUPTS}.tgz" ];
   then
     echo "error: empty tar"
     BCKFAILED=1
@@ -66,12 +66,12 @@ function doexport
 
 function cleanup
 {
-	if [ -z "$EXPORTRETENTION" ];
-	then
-		echo "cleanup skipped, no EXPORTRETENTION defined"
-	else
-		find $LOGDIR -iname export_barman_\*.log -type f -mtime +$EXPORTRETENTION -delete
-		find $LOGDIR -type d -empty -delete
+  if [ -z "$EXPORTRETENTION" ];
+  then
+    echo "cleanup skipped, no EXPORTRETENTION defined"
+  else
+    find $LOGDIR -iname export_barman_\*.log -type f -mtime +$EXPORTRETENTION -delete
+    find $LOGDIR -type d -empty -delete
     for i in $(find $EXPORTDIR -iname export_barman_\*.tgz -type f -mtime +$EXPORTRETENTION);
     do
       rm -f $i
@@ -80,7 +80,7 @@ function cleanup
         $AWSBIN s3 rm ${S3BUCKET}/$(basename $i)
       fi
     done
-	fi
+  fi
 }
 
 BASEDIRBCK=$(dirname $0)
@@ -88,22 +88,22 @@ BASENAMEBCK=$(basename $0)
 
 if [ ! -z "$1" ] && [ -f "$1" ];
 then
-	. $1 2>/dev/null
+  . $1 2>/dev/null
 else
-	if [[ -s "$BASEDIRBCK/${BASENAMEBCK%%.*}.config" ]];
-	then
-		. $BASEDIRBCK/${BASENAMEBCK%%.*}.config 2>/dev/null
-	else
-		echo "config file missing"
-		exit 1
-	fi
+  if [[ -s "$BASEDIRBCK/${BASENAMEBCK%%.*}.config" ]];
+  then
+  . $BASEDIRBCK/${BASENAMEBCK%%.*}.config 2>/dev/null
+  else
+  echo "config file missing"
+  exit 1
+  fi
 fi
 
 BARMANBIN=${BARMANBIN-$(which barman 2>/dev/null)}
 if [ -z "$BARMANBIN" ];
 then
-	echo "barman not found"
-	BCKFAILED=1
+  echo "barman not found"
+  BCKFAILED=1
 fi
 
 if [ ! -z "${S3BUCKET}" ];
