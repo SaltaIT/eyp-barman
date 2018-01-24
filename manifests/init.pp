@@ -17,18 +17,18 @@ class barman(
   class { '::barman::install':
     sshkey_type => $sshkey_type,
     sshkey_key  => $sshkey_key,
-  } ->
-
+  }
+  ->
   class { '::barman::config':
     barmanhome       => $barmanhome,
     barmanlog        => $barmanlog,
     barmanconfigdir  => $barmanconfigdir,
     barmanconfigfile => $barmanconfigfile,
     compression      => $compression,
-  } ~>
-
+  }
+  ~>
   class { '::barman::service':
-  } ->
-
+  }
+  ->
   Class['::barman']
 }
