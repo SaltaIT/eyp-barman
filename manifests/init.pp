@@ -31,4 +31,5 @@ class barman(
   }
   ->
   Class['::barman']
+
 }
