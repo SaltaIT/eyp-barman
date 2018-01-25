@@ -13,7 +13,6 @@ class barman(
               $barmanconfigfile = $barman::params::barmanconfigfile_default,
               $compression      = 'gzip',
             ) inherits barman::params{
-
   class { '::barman::install':
     sshkey_type => $sshkey_type,
     sshkey_key  => $sshkey_key,
