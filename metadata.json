@@ -2,7 +2,7 @@
   "name": "eyp-barman",
   "version": "0.1.6",
   "author": "eyp",
-  "summary": "manages barman: backup for postgres",
+  "summary": "manages barman: physical backup and PITR manager for postgres",
   "license": "Apache-2.0",
   "source": "https://github.com/NTTCom-MS/eyp-barman",
   "project_page": "https://github.com/NTTCom-MS/eyp-barman",
