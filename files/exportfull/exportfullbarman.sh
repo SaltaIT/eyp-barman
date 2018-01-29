@@ -111,8 +111,8 @@ then
   AWSBIN=${AWSBIN-$(which aws 2>/dev/null)}
   if [ -z "$AWSBIN" ];
   then
-  	echo "aws not found"
-  	BCKFAILED=1
+    echo "aws not found"
+    BCKFAILED=1
   fi
 
 fi
