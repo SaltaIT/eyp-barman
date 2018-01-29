@@ -86,17 +86,17 @@ function dobackup
 				echo "barman error, check logs"
 				BCKFAILED=1
 			fi
-		else
-			if [ ! -z "${EXPORT_ACTION}" ];
-			then
-				echo "export action:" > ${DUMPDEST}/barman.log 2>&1
-				${EXPORT_ACTION} > ${DUMPDEST}/barman.log 2>&1
+		fi
 
-				if [ "$?" -ne 0 ];
-				then
-					echo "export error, check logs"
-					BCKFAILED=1
-				fi
+		if [ "${BCKFAILED}" -ne "1" ] && [ ! -z "${EXPORT_ACTION}" ];
+		then
+			echo "export action:" > ${DUMPDEST}/barman.log 2>&1
+			${EXPORT_ACTION} > ${DUMPDEST}/barman.log 2>&1
+
+			if [ "$?" -ne 0 ];
+			then
+				echo "export error, check logs"
+				BCKFAILED=1
 			fi
 		fi
 	fi
