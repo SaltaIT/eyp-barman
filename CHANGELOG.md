@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.7
+
+* improved backup error detection for barman backups script
+
 ## 0.1.6
 
 * bugfix export script
