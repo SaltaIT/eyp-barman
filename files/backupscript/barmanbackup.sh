@@ -82,6 +82,7 @@ function dobackup
         let DIFF_TS=LATEST_BACKUP_TS-NOW_TS
       fi
 
+      # canviar per comprobar q hi ha un backup posterior a STARTBARMAN_TS?
       if [ "${DIFF_TS}" -gt 300 ]; # més de 5 minuts
       then
         echo "barman error, check logs"
