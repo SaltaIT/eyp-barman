@@ -67,6 +67,7 @@ function dobackup
     echo "no instances defined"
     BCKFAILED=1
   else
+    STARTBARMAN_TS="$(date +%s)"
     $BARMANBIN backup $INSTANCE_NAME > ${DUMPDEST}/barman.log 2>&1
 
     if [ "$?" -ne 0 ];
@@ -85,6 +86,7 @@ function dobackup
       then
         echo "barman error, check logs"
         date
+        echo "STARTBARMAN_TS: ${STARTBARMAN_TS}"
         barman list-backup gbm
         echo "NOW_TS: ${NOW_TS} vs LATEST_BACKUP_TS: ${LATEST_BACKUP_TS} diff: ${DIFF_TS}"
         BCKFAILED=1
