@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.8
+
+* debug info for **barmanbackup**
+
 ## 0.1.7
 
 * improved backup error detection for barman backups script
