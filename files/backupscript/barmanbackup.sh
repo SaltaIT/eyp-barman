@@ -84,6 +84,9 @@ function dobackup
       if [ "${DIFF_TS}" -gt 300 ]; # més de 5 minuts
       then
         echo "barman error, check logs"
+        date
+        barman list-backup gbm
+        echo "NOW_TS: ${NOW_TS} vs LATEST_BACKUP_TS: ${LATEST_BACKUP_TS} diff: ${DIFF_TS}"
         BCKFAILED=1
       fi
     fi
