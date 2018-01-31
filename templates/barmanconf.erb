@@ -18,6 +18,8 @@ log_file = <%= @barmanlog %>
 ; Default compression level: possible values are None (default), bzip2, gzip or custom
 compression = <%= @compression %>
 
+archiver = on
+
 ; Pre/post backup hook scripts
 ;pre_backup_script = env | grep ^BARMAN
 ;post_backup_script = env | grep ^BARMAN

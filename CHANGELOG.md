@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.9
+
+* bugfix barman 2.0 (archiver = on)
+
 ## 0.1.8
 
 * debug info for **barmanbackup**
