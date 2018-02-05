@@ -155,6 +155,11 @@ else
   fi
 fi
 
+if [ ! -z "${DEBUG}" ] && [ "${DEBUG}" -eq 1 ];
+then
+  set -x
+fi
+
 INSTANCE_NAME=${INSTANCE_NAME-$1}
 
 BARMANBIN=${BARMANBIN-$(which barman 2>/dev/null)}

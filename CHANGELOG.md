@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.1.10
+
+* debug flag for **barmanbackup.sh**
+
 ## 0.1.9
 
 * bugfix barman 2.0 (archiver = on)
