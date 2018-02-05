@@ -162,11 +162,16 @@ fi
 
 INSTANCE_NAME=${INSTANCE_NAME-$1}
 
-BARMANBIN=${BARMANBIN-$(which barman 2>/dev/null)}
-if [ -z "$BARMANBIN" ];
+if [ ! -e "/bin/barman" ];
 then
-  echo "barman not found"
-  BCKFAILED=1
+  BARMANBIN=${BARMANBIN-$(which barman 2>/dev/null)}
+  if [ -z "$BARMANBIN" ];
+  then
+    echo "barman not found"
+    BCKFAILED=1
+  fi
+else
+  BARMANBIN="/bin/barman"
 fi
 
 initbck
