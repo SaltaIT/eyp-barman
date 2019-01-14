@@ -33,7 +33,7 @@ class barman(
 
   class { '::barman::service':
   }
-  
+
   ->
 
   Class['::barman']
