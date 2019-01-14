@@ -18,7 +18,9 @@ class barman(
     sshkey_type => $sshkey_type,
     sshkey_key  => $sshkey_key,
   }
+
   ->
+
   class { '::barman::config':
     barmanhome       => $barmanhome,
     barmanlog        => $barmanlog,
@@ -26,9 +28,13 @@ class barman(
     barmanconfigfile => $barmanconfigfile,
     compression      => $compression,
   }
+
   ~>
+
   class { '::barman::service':
   }
+  
   ->
+
   Class['::barman']
 }
