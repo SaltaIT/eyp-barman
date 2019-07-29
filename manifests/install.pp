@@ -1,18 +1,30 @@
 class barman::install inherits barman {
 
-  if($barman::params::rsync_package!=undef)
+  if($barman::manage_package)
   {
-    if(!defined(Package[$barman::params::rsync_package]))
+    if($barman::params::rsync_package!=undef)
     {
-      package { $barman::params::rsync_package:
-        ensure => 'installed',
-        before => Package[$barman::params::barman_package],
+      if(!defined(Package[$barman::params::rsync_package]))
+      {
+        package { $barman::params::rsync_package:
+          ensure => 'installed',
+          before => Package[$barman::params::barman_package],
+        }
       }
     }
-  }
 
-  package { $barman::params::barman_package:
-    require => $barman::params::barman_package_require,
+    if($barman::params::include_epel)
+    {
+      include ::epel
+
+      Package[$barman::params::barman_package] {
+        require => Class['::epel'],
+      }
+    }
+
+    package { $barman::params::barman_package:
+      ensure => $barman::package_ensure,
+    }
   }
 
   if($barman::sshkey_type!=undef and $barman::sshkey_key!=undef)

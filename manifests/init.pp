@@ -23,6 +23,8 @@ class barman(
               $barmanconfigfile_group    = 'root',
               $barmanconfigfile_mode     = '0644',
               $compression               = 'gzip',
+              $manage_package            = true,
+              $package_ensure            = 'installed',
             ) inherits barman::params {
 
   class { '::barman::install': } ->

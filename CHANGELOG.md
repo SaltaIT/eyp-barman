@@ -3,6 +3,7 @@
 ## 0.2.0
 
 * Major rewrite of **::barman** class - No incompatible change introduced
+* added **eyp-epel** as a requirement
 
 ## 0.1.10
 
