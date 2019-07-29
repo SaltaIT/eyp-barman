@@ -1,7 +1,4 @@
-class barman::install (
-                        $sshkey_type = undef,
-                        $sshkey_key  = undef,
-                      ) inherits barman::params {
+class barman::install inherits barman {
 
   if($barman::params::rsync_package!=undef)
   {
@@ -18,12 +15,12 @@ class barman::install (
     require => $barman::params::barman_package_require,
   }
 
-  if($sshkey_type!=undef and $sshkey_key!=undef)
+  if($barman::sshkey_type!=undef and $barman::sshkey_key!=undef)
   {
     ssh_authorized_key { 'barman-key':
       user    => $barman::params::barmanuser,
-      type    => $sshkey_type,
-      key     => $sshkey_key,
+      type    => $barman::sshkey_type,
+      key     => $barman::sshkey_key,
       require => Package[$barman::params::barman_package],
     }
   }

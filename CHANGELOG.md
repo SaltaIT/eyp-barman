@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.2.0
+
+* Major rewrite of **::barman** class - No incompatible change introduced
+
 ## 0.1.10
 
 * debug flag for **barmanbackup.sh**

@@ -1,33 +1,27 @@
-class barman::config(
-                      $barmanhome       = $barman::params::barmanhome_default,
-                      $barmanlog        = $barman::params::barmanlog_default,
-                      $barmanconfigdir  = $barman::params::barmanconfigdir_default,
-                      $barmanconfigfile = $barman::params::barmanconfigfile_default,
-                      $compression      = 'gzip',
-                    ) inherits barman::params {
+class barman::config inherits barman {
 
-  file { $barmanhome:
+  file { $barman::barmanhome:
     ensure => 'directory',
-    owner  => $barman::params::barmanuser,
-    group  => $barman::params::barmangroup,
-    mode   => '0755',
+    owner  => $barman::barmanhome_username,
+    group  => $barman::barmanhome_group,
+    mode   => $barman::barmanhome_mode,
   }
 
-  file { $barmanconfigdir:
+  file { $barman::barmanconfigdir:
     ensure  => 'directory',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0755',
-    recurse => true,
-    purge   => true,
+    owner   => $barman::barmanconfigdir_username,
+    group   => $barman::barmanconfigdir_group,
+    mode    => $barman::barmanconfigdir_mode,
+    recurse => $barman::barmanconfigdir_recurse,
+    purge   => $barman::barmanconfigdir_purge,
     require => Package[$barman::params::barman_package],
   }
 
-  file { $barmanconfigfile:
+  file { $barman::barmanconfigfile:
     ensure  => 'present',
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
+    owner   => $barman::barmanconfigfile_username,
+    group   => $barman::barmanconfigfile_group,
+    mode    => $barman::barmanconfigfile_mode,
     content => template("${module_name}/barmanconf.erb"),
     require => Package[$barman::params::barman_package],
   }
