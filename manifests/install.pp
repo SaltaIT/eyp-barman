@@ -23,7 +23,8 @@ class barman::install inherits barman {
     }
 
     package { $barman::params::barman_package:
-      ensure => $barman::package_ensure,
+      ensure          => $barman::package_ensure,
+      install_options => $barman::params::barman_package_install_options,
     }
   }
 

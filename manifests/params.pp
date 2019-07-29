@@ -24,10 +24,12 @@ class barman::params {
         /^6.*$/:
         {
           $include_epel=true
+          $barman_package_install_options=[ { '--disablerepo' => 'pgdg10,pgdg11,pgdg94,pgdg95,pgdg96' } ]
         }
         /^7.*$/:
         {
           $include_epel=true
+          $barman_package_install_options=undef
         }
         default: { fail("Unsupported RHEL/CentOS version! - ${::operatingsystemrelease}")  }
       }
