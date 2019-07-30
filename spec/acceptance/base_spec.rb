@@ -9,8 +9,6 @@ describe 'barman class' do
     it 'should work with no errors' do
       pp = <<-EOF
 
-      include ::epel
-
       class { 'postgresql':
     		wal_level         => 'hot_standby',
     		max_wal_senders   => '3',
