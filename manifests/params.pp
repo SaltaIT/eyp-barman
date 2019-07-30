@@ -7,22 +7,31 @@ class barman::params {
   {
     'redhat':
     {
+      $barman_package='barman'
+      $barman_package_require=Class['epel']
+
+      $barmanuser='barman'
+      $barmangroup='barman'
+
+      $barmanhome_default='/var/lib/barman'
+      $barmanlog_default='/var/log/barman/barman.log'
+      $barmanconfigdir_default='/etc/barman.d'
+      $barmanconfigfile_default='/etc/barman.conf'
+
+      $rsync_package='rsync'
       case $::operatingsystemrelease
       {
-        /^[67].*$/:
+        /^6.*$/:
         {
-          $barman_package='barman'
-          $barman_package_require=Class['epel']
-
-          $barmanuser='barman'
-          $barmangroup='barman'
-
-          $barmanhome_default='/var/lib/barman'
-          $barmanlog_default='/var/log/barman/barman.log'
-          $barmanconfigdir_default='/etc/barman.d'
-          $barmanconfigfile_default='/etc/barman.conf'
-
-          $rsync_package='rsync'
+          $include_epel=true
+          $include_pgdb_repo=false
+          $barman_package_install_options=[ { '--disablerepo' => 'pgdg94,pgdg95,pgdg96,pgdg10,pgdg11' } ]
+        }
+        /^7.*$/:
+        {
+          $include_epel=true
+          $include_pgdb_repo=true
+          $barman_package_install_options=undef
         }
         default: { fail("Unsupported RHEL/CentOS version! - ${::operatingsystemrelease}")  }
       }

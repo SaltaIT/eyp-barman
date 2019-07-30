@@ -4,37 +4,31 @@
 #
 class barman(
               #install
-              $sshkey_type      = undef,
-              $sshkey_key       = undef,
+              $sshkey_type               = undef,
+              $sshkey_key                = undef,
               #config
-              $barmanhome       = $barman::params::barmanhome_default,
-              $barmanlog        = $barman::params::barmanlog_default,
-              $barmanconfigdir  = $barman::params::barmanconfigdir_default,
-              $barmanconfigfile = $barman::params::barmanconfigfile_default,
-              $compression      = 'gzip',
-            ) inherits barman::params{
+              $barmanhome                = $barman::params::barmanhome_default,
+              $barmanhome_username       = $barman::params::barmanuser,
+              $barmanhome_group          = $barman::params::barmangroup,
+              $barmanhome_mode           = '0755',
+              $barmanlog                 = $barman::params::barmanlog_default,
+              $barmanconfigdir           = $barman::params::barmanconfigdir_default,
+              $barmanconfigdir_username  = 'root',
+              $barmanconfigdir_group     = 'root',
+              $barmanconfigdir_recurse   = true,
+              $barmanconfigdir_purge     = true,
+              $barmanconfigdir_mode      = '0755',
+              $barmanconfigfile          = $barman::params::barmanconfigfile_default,
+              $barmanconfigfile_username = 'root',
+              $barmanconfigfile_group    = 'root',
+              $barmanconfigfile_mode     = '0644',
+              $compression               = 'gzip',
+              $manage_package            = true,
+              $package_ensure            = 'installed',
+            ) inherits barman::params {
 
-  class { '::barman::install':
-    sshkey_type => $sshkey_type,
-    sshkey_key  => $sshkey_key,
-  }
-
-  ->
-
-  class { '::barman::config':
-    barmanhome       => $barmanhome,
-    barmanlog        => $barmanlog,
-    barmanconfigdir  => $barmanconfigdir,
-    barmanconfigfile => $barmanconfigfile,
-    compression      => $compression,
-  }
-
-  ~>
-
-  class { '::barman::service':
-  }
-
-  ->
-
+  class { '::barman::install': } ->
+  class { '::barman::config': } ~>
+  class { '::barman::service': } ->
   Class['::barman']
 }

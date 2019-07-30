@@ -1,29 +1,50 @@
-class barman::install (
-                        $sshkey_type = undef,
-                        $sshkey_key  = undef,
-                      ) inherits barman::params {
+class barman::install inherits barman {
 
-  if($barman::params::rsync_package!=undef)
+  if($barman::manage_package)
   {
-    if(!defined(Package[$barman::params::rsync_package]))
+    if($barman::params::rsync_package!=undef)
     {
-      package { $barman::params::rsync_package:
-        ensure => 'installed',
-        before => Package[$barman::params::barman_package],
+      if(!defined(Package[$barman::params::rsync_package]))
+      {
+        package { $barman::params::rsync_package:
+          ensure => 'installed',
+          before => Package[$barman::params::barman_package],
+        }
       }
+    }
+
+    if($barman::params::include_epel)
+    {
+      include ::epel
+
+      if($barman::params::include_epel)
+      {
+        include ::postgresql::repo
+
+        Package[$barman::params::barman_package] {
+          require => Class[['::postgresql::repo', '::epel']],
+        }
+      }
+      else
+      {
+        Package[$barman::params::barman_package] {
+          require => Class['::epel'],
+        }
+      }
+    }
+
+    package { $barman::params::barman_package:
+      ensure          => $barman::package_ensure,
+      install_options => $barman::params::barman_package_install_options,
     }
   }
 
-  package { $barman::params::barman_package:
-    require => $barman::params::barman_package_require,
-  }
-
-  if($sshkey_type!=undef and $sshkey_key!=undef)
+  if($barman::sshkey_type!=undef and $barman::sshkey_key!=undef)
   {
     ssh_authorized_key { 'barman-key':
       user    => $barman::params::barmanuser,
-      type    => $sshkey_type,
-      key     => $sshkey_key,
+      type    => $barman::sshkey_type,
+      key     => $barman::sshkey_key,
       require => Package[$barman::params::barman_package],
     }
   }

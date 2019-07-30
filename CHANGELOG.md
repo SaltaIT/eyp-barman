@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.2.0
+
+* Major rewrite of **::barman** class - No incompatible change introduced
+* set **backup_options** to **exclusive_backup**
+* added **eyp-epel** and **eyp-postgres** as a requirement
+
 ## 0.1.10
 
 * debug flag for **barmanbackup.sh**

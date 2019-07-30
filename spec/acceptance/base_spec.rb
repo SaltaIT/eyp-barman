@@ -9,15 +9,13 @@ describe 'barman class' do
     it 'should work with no errors' do
       pp = <<-EOF
 
-      include ::epel
-
       class { 'postgresql':
     		wal_level         => 'hot_standby',
     		max_wal_senders   => '3',
     		wal_keep_segments => '8',
-    		version           => '9.6',
+    		version           => '10',
         archive_mode      => true,
-        archive_dir       => '/var/lib/barman/gbm/incoming',
+        archive_dir       => '/var/lib/barman/pgm/incoming',
         archive_dir_mode  => '0666',
         archive_dir_chmod => '0666',
     	}
@@ -30,9 +28,9 @@ describe 'barman class' do
 
       barman::backup { 'pgm':
         description => 'postgres master',
-        host => '192.168.56.29',
-        port => '60901',
-        mailto => 'backup_reports@systemadmin.es',
+        host        => '127.0.0.1',
+        port        => '5432',
+        mailto      => 'backup_reports@systemadmin.es',
       }
 
       EOF
@@ -66,9 +64,9 @@ describe 'barman class' do
       its(:content) { should match 'puppet managed file' }
       its(:content) { should match '[pgm]' }
       its(:content) { should match 'retention_policy = RECOVERY WINDOW OF 30 days' }
-      its(:content) { should match 'host=192.168.56.29' }
+      its(:content) { should match 'host=127.0.0.1' }
       its(:content) { should match 'user=postgres' }
-      its(:content) { should match 'port=60901' }
+      its(:content) { should match 'port=5432' }
       its(:content) { should match 'description = "postgres master"' }
     end
 

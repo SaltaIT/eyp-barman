@@ -1,5 +1,5 @@
-class barman::service (
-                      ) inherits barman::params {
+class barman::service inherits barman {
+
   #service or exec here
   #/usr/bin/barman cron
   cron { 'barman cron':
