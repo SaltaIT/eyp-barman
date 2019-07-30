@@ -17,8 +17,19 @@ class barman::install inherits barman {
     {
       include ::epel
 
-      Package[$barman::params::barman_package] {
-        require => Class['::epel'],
+      if($barman::params::include_epel)
+      {
+        include ::postgresql::repo
+
+        Package[$barman::params::barman_package] {
+          require => Class[['::postgresql::repo', '::epel']],
+        }
+      }
+      else
+      {
+        Package[$barman::params::barman_package] {
+          require => Class['::epel'],
+        }
       }
     }
 
