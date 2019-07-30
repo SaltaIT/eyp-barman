@@ -64,9 +64,9 @@ describe 'barman class' do
       its(:content) { should match 'puppet managed file' }
       its(:content) { should match '[pgm]' }
       its(:content) { should match 'retention_policy = RECOVERY WINDOW OF 30 days' }
-      its(:content) { should match 'host=192.168.56.29' }
+      its(:content) { should match 'host=127.0.0.1' }
       its(:content) { should match 'user=postgres' }
-      its(:content) { should match 'port=60901' }
+      its(:content) { should match 'port=5432' }
       its(:content) { should match 'description = "postgres master"' }
     end
 
