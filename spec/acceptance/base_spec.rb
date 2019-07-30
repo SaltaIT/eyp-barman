@@ -28,8 +28,8 @@ describe 'barman class' do
 
       barman::backup { 'pgm':
         description => 'postgres master',
-        host        => '192.168.56.29',
-        port        => '60901',
+        host        => '127.0.0.1',
+        port        => '5432',
         mailto      => 'backup_reports@systemadmin.es',
       }
 
