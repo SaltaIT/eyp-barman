@@ -24,7 +24,7 @@ class barman::params {
         /^6.*$/:
         {
           $include_epel=true
-          $barman_package_install_options=[ { '--disablerepo' => 'pgdg10,pgdg11,pgdg94,pgdg95,pgdg96' } ]
+          $barman_package_install_options=[ { '--disablerepo' => 'pgdg94,pgdg95,pgdg96,pgdg10,pgdg11' } ]
         }
         /^7.*$/:
         {
