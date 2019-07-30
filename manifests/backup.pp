@@ -6,6 +6,7 @@ define barman::backup (
                         $recovery_window_days        = '30',
                         $user                        = 'postgres',
                         $port                        = '5432',
+                        $backup_options              = 'exclusive_backup',
                         $use_notificationscript      = true,
                         # notification script
                         $notification_ensure         = 'present',
