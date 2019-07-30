@@ -4,7 +4,7 @@
 
 * Major rewrite of **::barman** class - No incompatible change introduced
 * set **backup_options** to **exclusive_backup**
-* added **eyp-epel** as a requirement
+* added **eyp-epel** and **eyp-postgres** as a requirement
 
 ## 0.1.10
 
