@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.2.1
+
+* added IDHOST in the log path for the barman backup script
+
 ## 0.2.0
 
 * Major rewrite of **::barman** class - No incompatible change introduced

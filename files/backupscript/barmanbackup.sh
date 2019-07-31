@@ -60,7 +60,7 @@ function mailer
 
 function dobackup
 {
-  DUMPDEST="$LOGDIR/$BACKUPTS"
+  DUMPDEST="$LOGDIR/${IDHOST}/$BACKUPTS"
 
   mkdir -p $DUMPDEST
 
