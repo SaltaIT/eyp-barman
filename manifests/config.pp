@@ -14,7 +14,7 @@ class barman::config inherits barman {
     mode    => $barman::barmanconfigdir_mode,
     recurse => $barman::barmanconfigdir_recurse,
     purge   => $barman::barmanconfigdir_purge,
-    require => Package[$barman::params::barman_package],
+    require => Class['::barman::install'],
   }
 
   file { $barman::barmanconfigfile:
@@ -23,7 +23,7 @@ class barman::config inherits barman {
     group   => $barman::barmanconfigfile_group,
     mode    => $barman::barmanconfigfile_mode,
     content => template("${module_name}/barmanconf.erb"),
-    require => Package[$barman::params::barman_package],
+    require => Class['::barman::install'],
   }
 
 }
