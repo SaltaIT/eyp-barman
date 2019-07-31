@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.2.2
+
+* bugfix manage_package
+
 ## 0.2.1
 
 * added IDHOST in the log path for the barman backup script
