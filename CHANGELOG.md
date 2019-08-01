@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.2.3
+
+* bugfix barman backup script
+
 ## 0.2.2
 
 * bugfix manage_package

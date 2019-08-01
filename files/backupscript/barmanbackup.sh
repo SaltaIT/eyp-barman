@@ -75,7 +75,7 @@ function dobackup
     if [ "$?" -ne 0 ];
     then
       NOW_TS="$(date +%s)"
-      LATEST_BACKUP_TS="$(date -d "$(barman list-backup gbm | cut -f2 -d- | head -n1)" +%s)"
+      LATEST_BACKUP_TS="$(date -d "$(barman list-backup ${INSTANCE_NAME} | cut -f2 -d- | head -n1)" +%s)"
 
       if [ "${NOW_TS}" -gt "${LATEST_BACKUP_TS}" ];
       then
@@ -90,7 +90,7 @@ function dobackup
         echo "barman error, check logs"
         date
         echo "STARTBARMAN_TS: ${STARTBARMAN_TS}"
-        barman list-backup gbm
+        barman list-backup ${INSTANCE_NAME}
         echo "NOW_TS: ${NOW_TS} vs LATEST_BACKUP_TS: ${LATEST_BACKUP_TS} diff: ${DIFF_TS}"
         BCKFAILED=1
       fi
@@ -123,13 +123,15 @@ function cleanup
 
 function compress
 {
+  DUMPDEST="${LOGDIR}/${IDHOST}/${BACKUPTS}"
+
   if [ -z "$COMPRESS" ];
   then
     echo "compress skipped"
   else
     if [ "$COMPRESS" != "false" ];
     then
-      find $LOGDIR/$BACKUPTS -type f -exec gzip -9 {} \;
+      find $DUMPDEST -type f -exec gzip -9 {} \;
     else
       echo "compress disabled"
     fi
@@ -140,7 +142,6 @@ PATH="/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin"
 
 BASEDIRBCK=$(dirname $0)
 BASENAMEBCK=$(basename $0)
-IDHOST=${IDHOST-$(hostname -s)}
 
 if [ ! -z "$1" ] && [ -f "$1" ];
 then
@@ -161,6 +162,8 @@ then
 fi
 
 INSTANCE_NAME=${INSTANCE_NAME-$1}
+
+IDHOST=${IDHOST-${INSTANCE_NAME}}
 
 if [ ! -e "/bin/barman" ];
 then
