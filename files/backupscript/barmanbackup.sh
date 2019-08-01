@@ -123,13 +123,15 @@ function cleanup
 
 function compress
 {
+  DUMPDEST="${LOGDIR}/${IDHOST}/${BACKUPTS}"
+
   if [ -z "$COMPRESS" ];
   then
     echo "compress skipped"
   else
     if [ "$COMPRESS" != "false" ];
     then
-      find $LOGDIR/$BACKUPTS -type f -exec gzip -9 {} \;
+      find $DUMPDEST -type f -exec gzip -9 {} \;
     else
       echo "compress disabled"
     fi
