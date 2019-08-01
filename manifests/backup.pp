@@ -95,7 +95,7 @@ define barman::backup (
       owner   => 'root',
       group   => 'root',
       mode    => '0640',
-      require => File["${notificationscript_basedir}/pgbarmanbackup_${backupname}.sh"],
+      require => File["${notificationscript_basedir}/pgbarmanbackup.sh"],
       content => template("${module_name}/backupscript/barmanbackupconfig.erb"),
     }
 
