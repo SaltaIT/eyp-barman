@@ -78,13 +78,16 @@ define barman::backup (
 
   if($use_notificationscript)
   {
-    file { "${notificationscript_basedir}/pgbarmanbackup_${backupname}.sh":
-      ensure  => $notification_ensure,
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0750',
-      require => File["${barman::config::barmanconfigdir}/${backupname}.conf"],
-      content => file("${module_name}/backupscript/barmanbackup.sh"),
+    if !defined(File["${notificationscript_basedir}/pgbarmanbackup.sh"])
+    {
+      file { "${notificationscript_basedir}/pgbarmanbackup.sh":
+        ensure  => $notification_ensure,
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0750',
+        require => File["${barman::config::barmanconfigdir}/${backupname}.conf"],
+        content => file("${module_name}/backupscript/barmanbackup.sh"),
+      }
     }
 
     file { "${notificationscript_basedir}/pgbarmanbackup_${backupname}.config":
@@ -92,7 +95,7 @@ define barman::backup (
       owner   => 'root',
       group   => 'root',
       mode    => '0640',
-      require => File["${notificationscript_basedir}/pgbarmanbackup_${backupname}.sh"],
+      require => File["${notificationscript_basedir}/pgbarmanbackup.sh"],
       content => template("${module_name}/backupscript/barmanbackupconfig.erb"),
     }
 
@@ -100,7 +103,7 @@ define barman::backup (
     {
       cron { "cronjob barman ${backupname}":
         ensure   => $cron_ensure,
-        command  => "${notificationscript_basedir}/pgbarmanbackup_${backupname}.sh",
+        command  => "${notificationscript_basedir}/pgbarmanbackup.sh ${notificationscript_basedir}/pgbarmanbackup_${backupname}.config",
         user     => 'root',
         hour     => $hour_notificationscript,
         minute   => $minute_notificationscript,
@@ -108,7 +111,7 @@ define barman::backup (
         monthday => $monthday_notificationscript,
         weekday  => $weekday_notificationscript,
         require  => File[ [ "${notificationscript_basedir}/pgbarmanbackup_${backupname}.config",
-                            "${notificationscript_basedir}/pgbarmanbackup_${backupname}.sh"
+                            "${notificationscript_basedir}/pgbarmanbackup.sh"
                         ] ],
       }
     }
