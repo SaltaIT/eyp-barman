@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.2.4
+
+* **barman::backup** improvement
+
 ## 0.2.3
 
 * bugfix barman backup script
