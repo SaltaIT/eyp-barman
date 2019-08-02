@@ -30,6 +30,7 @@ define barman::backup (
                         $export_full_tmpdir          = '/var/lib/export_barman',
                         $export_retention            = '1',
                         $debug                       = false,
+                        $max_backup_ts_diff          = '300',
                       ) {
   include ::barman
 

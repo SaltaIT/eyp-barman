@@ -13,7 +13,7 @@ function initbck
     mkdir -p $LOGDIR
     BACKUPTS=$(date +%Y%m%d%H%M)
 
-    CURRENTBACKUPLOG="$LOGDIR/$BACKUPTS.log"
+    CURRENTBACKUPLOG="$LOGDIR/${IDHOST}-${BACKUPTS}.log"
 
     BCKFAILED=0
 
@@ -70,12 +70,13 @@ function dobackup
     BCKFAILED=1
   else
     STARTBARMAN_TS="$(date +%s)"
-    $BARMANBIN backup $INSTANCE_NAME > ${DUMPDEST}/barman.log 2>&1
+    echo "$(date) - barman backup $INSTANCE_NAME" >> ${DUMPDEST}/barman.log 2>&1
+    $BARMANBIN backup $INSTANCE_NAME >> ${DUMPDEST}/barman.log 2>&1
 
     if [ "$?" -ne 0 ];
     then
       NOW_TS="$(date +%s)"
-      LATEST_BACKUP_TS="$(date -d "$(barman list-backup ${INSTANCE_NAME} | cut -f2 -d- | head -n1)" +%s)"
+      LATEST_BACKUP_TS="$(date -d "$(barman list-backup ${INSTANCE_NAME} | grep -v FAILED | awk '{ print $2 }' | sed -e 's/T/ /g' -e 's/\([0-9][0-9]\)\([0-9][0-9]\)$/:\1:\2/' | head -n1)" +%s)"
 
       if [ "${NOW_TS}" -gt "${LATEST_BACKUP_TS}" ];
       then
@@ -85,12 +86,13 @@ function dobackup
       fi
 
       # canviar per comprobar q hi ha un backup posterior a STARTBARMAN_TS?
-      if [ "${DIFF_TS}" -gt 300 ]; # més de 5 minuts
+      if [ "${DIFF_TS}" -gt ${MAX_BACKUP_TS_DIFF} ];
       then
         echo "barman error, check logs"
         date
         echo "STARTBARMAN_TS: ${STARTBARMAN_TS}"
         barman list-backup ${INSTANCE_NAME}
+        barman list-backup ${INSTANCE_NAME} >> ${DUMPDEST}/barman.log 2>&1
         echo "NOW_TS: ${NOW_TS} vs LATEST_BACKUP_TS: ${LATEST_BACKUP_TS} diff: ${DIFF_TS}"
         BCKFAILED=1
       fi
@@ -98,8 +100,8 @@ function dobackup
 
     if [ "${BCKFAILED}" -ne "1" ] && [ ! -z "${EXPORT_ACTION}" ];
     then
-      echo "export action:" > ${DUMPDEST}/barman.log 2>&1
-      ${EXPORT_ACTION} > ${DUMPDEST}/barman.log 2>&1
+      echo "export action:" >> ${DUMPDEST}/barman.log 2>&1
+      ${EXPORT_ACTION} >> ${DUMPDEST}/barman.log 2>&1
 
       if [ "$?" -ne 0 ];
       then
