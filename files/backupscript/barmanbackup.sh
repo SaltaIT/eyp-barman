@@ -183,10 +183,10 @@ initbck
 
 if [ "$BCKFAILED" -ne 1 ];
 then
-  date
+  echo "STARING BACKUP: $(date)"
   echo nana nana nana nana BARMAN!
   dobackup
-  date
+  echo "END BACKUP: $(date)"
 fi
 
 mailer
