@@ -70,7 +70,8 @@ function dobackup
     BCKFAILED=1
   else
     STARTBARMAN_TS="$(date +%s)"
-    echo "$(date) - barman backup $INSTANCE_NAME" >> ${DUMPDEST}/barman.log 2>&1
+    echo "$(date) - barman backup ${INSTANCE_NAME}"
+    echo "$(date) - barman backup ${INSTANCE_NAME}" >> ${DUMPDEST}/barman.log 2>&1
     $BARMANBIN backup $INSTANCE_NAME >> ${DUMPDEST}/barman.log 2>&1
 
     if [ "$?" -ne 0 ];
@@ -183,10 +184,10 @@ initbck
 
 if [ "$BCKFAILED" -ne 1 ];
 then
-  echo "STARING BACKUP: $(date)"
-  echo nana nana nana nana BARMAN!
+  echo "STARING BACKUP ${INSTANCE_NAME}: $(date)"
+  echo "nana nana nana nana BARMAN!"
   dobackup
-  echo "END BACKUP: $(date)"
+  echo "END BACKUP ${INSTANCE_NAME}: $(date)"
 fi
 
 mailer
