@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.2.7
+
+* added support for eyp-postgresql 0.4.0 branch
+
 ## 0.2.6
 
 * improved barman backup script output
