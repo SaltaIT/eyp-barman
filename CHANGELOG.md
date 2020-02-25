@@ -1,6 +1,6 @@
 # CHANGELOG
 
-# 0.2.8
+# 0.2.9
 
 * added **check_barman_backups_failed** for making sure there are no FAILED backups
 
