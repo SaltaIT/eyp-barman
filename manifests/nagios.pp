@@ -1,5 +1,6 @@
 class barman::nagios(
-                      $basedir = '/usr/local/bin',
+                      $basedir        = '/usr/local/bin',
+                      $add_nrpe_sudos = true,
                     ) inherits barman::params {
   include ::barman
 
