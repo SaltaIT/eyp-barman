@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 0.2.8
+
+* added **check_barman_backups_failed** for making sure there are no FAILED backups
+
 ## 0.2.7
 
 * added support for eyp-postgresql 0.4.0 branch
