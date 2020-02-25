@@ -48,4 +48,9 @@ class barman::install inherits barman {
       require => Package[$barman::params::barman_package],
     }
   }
+
+  if($barman::install_nagios_checks)
+  {
+    include ::barman::nagios
+  }
 }

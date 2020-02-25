@@ -70,6 +70,11 @@ describe 'barman class' do
       its(:content) { should match 'description = "postgres master"' }
     end
 
+    describe file('/usr/local/bin/check_barman_backups_failed') do
+      it { should be_file }
+      its(:content) { should match 'puppet managed file' }
+    end
+
     # barman list-server | grep pgm
     it "crontab pgm" do
       expect(shell("barman list-server | grep pgm").exit_code).to be_zero

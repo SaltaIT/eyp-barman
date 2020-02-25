@@ -25,6 +25,7 @@ class barman(
               $compression               = 'gzip',
               $manage_package            = true,
               $package_ensure            = 'installed',
+              $install_nagios_checks     = true,
             ) inherits barman::params {
 
   class { '::barman::install': } ->
