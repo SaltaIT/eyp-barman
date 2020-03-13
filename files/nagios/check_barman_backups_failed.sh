@@ -10,6 +10,15 @@
 # inf096 20200213T020001 - FAILED
 # inf096 20200212T020002 - FAILED
 
+barman list-server > /dev/null 2>&1
+
+if [ $? -ne 0 ];
+then
+  echo "ERROR getting list of servers"
+  exit 2
+fi
+
+
 for server in $(barman list-server | awk '{ print $1 }');
 do
   barman list-backup $server | grep FAILED
