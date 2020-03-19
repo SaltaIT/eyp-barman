@@ -4,12 +4,25 @@ class barman::nagios(
                     ) inherits barman::params {
   include ::barman
 
-  file { "${basedir}/check_barman_backups_failed":
+  file { "${basedir}/check_barman_servers":
     ensure  => 'present',
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-    content => file("${module_name}/nagios/check_barman_backups_failed.sh"),
+    content => file("${module_name}/nagios/check_barman_servers.sh"),
+  }
+
+  file { "${basedir}/check_barman_backups":
+    ensure  => 'present',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    content => file("${module_name}/nagios/check_barman_backups.sh"),
+  }
+
+  file { "${basedir}/check_barman_backups_failed":
+    ensure  => 'link',
+    target   => "${basedir}/check_barman_backups",
   }
 
   if($add_nrpe_sudos)
