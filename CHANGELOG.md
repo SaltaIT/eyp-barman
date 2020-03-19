@@ -1,6 +1,6 @@
 # CHANGELOG
 
-# 0.2.11
+# 0.2.12
 
 * Added **check_barman_servers** to make sure it is in compliance
 * Renamed backup check **check_barman_backups**
