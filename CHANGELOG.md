@@ -1,5 +1,11 @@
 # CHANGELOG
 
+# 0.2.11
+
+* Added **check_barman_servers** to make sure it is in compliance
+* Renamed backup check **check_barman_backups**
+  - Check number of available backups
+
 # 0.2.10
 
 * improved error check for **check_barman_backups_failed**
