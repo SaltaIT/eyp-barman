@@ -30,5 +30,11 @@ class barman::nagios(
     nrpe::sudo { 'sudo NRPE check_barman_backups_failed':
       command => "${basedir}/check_barman_backups_failed",
     }
+    nrpe::sudo { 'sudo NRPE check_barman_backups':
+      command => "${basedir}/check_barman_backups",
+    }
+    nrpe::sudo { 'sudo NRPE check_barman_servers':
+      command => "${basedir}/check_barman_servers",
+    }
   }
 }
