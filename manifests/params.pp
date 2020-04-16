@@ -7,7 +7,7 @@ class barman::params {
   {
     'redhat':
     {
-      $barman_package='barman'
+      $barman_package=[ 'barman', 'python-psycopg2' ]
       $barman_package_require=Class['epel']
 
       $barmanuser='barman'
