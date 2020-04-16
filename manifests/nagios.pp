@@ -20,6 +20,7 @@ class barman::nagios(
     content => file("${module_name}/nagios/check_barman_backups.sh"),
   }
 
+  # compatibility
   file { "${basedir}/check_barman_backups_failed":
     ensure  => 'link',
     target   => "${basedir}/check_barman_backups",
@@ -27,14 +28,17 @@ class barman::nagios(
 
   if($add_nrpe_sudos)
   {
-    nrpe::sudo { 'sudo NRPE check_barman_backups_failed':
-      command => "${basedir}/check_barman_backups_failed",
-    }
     nrpe::sudo { 'sudo NRPE check_barman_backups':
       command => "${basedir}/check_barman_backups",
     }
+
     nrpe::sudo { 'sudo NRPE check_barman_servers':
       command => "${basedir}/check_barman_servers",
+    }
+
+    # compatibility
+    nrpe::sudo { 'sudo NRPE check_barman_backups_failed':
+      command => "${basedir}/check_barman_backups_failed",
     }
   }
 }

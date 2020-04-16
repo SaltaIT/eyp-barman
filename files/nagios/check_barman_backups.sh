@@ -6,7 +6,7 @@ PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 WARNING=3
 CRITICAL=2
 
-while getopts 'U:l:w:h' OPT;
+while getopts 'w:c:h' OPT;
 do
     case $OPT in
         w)  WARNING="$OPTARG"

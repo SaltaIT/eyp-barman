@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 0.2.13
+
+* added **psycopg2** to the barman installation
+
 # 0.2.12
 
 * Added **check_barman_servers** to make sure it is in compliance
