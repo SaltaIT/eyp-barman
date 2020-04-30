@@ -20,6 +20,14 @@ class barman::nagios(
     content => file("${module_name}/nagios/check_barman_backups.sh"),
   }
 
+  file { "${basedir}/report_barman_backups":
+    ensure  => 'present',
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755',
+    content => file("${module_name}/nagios/report_barman_backups.sh"),
+  }
+
   # compatibility
   file { "${basedir}/check_barman_backups_failed":
     ensure  => 'link',

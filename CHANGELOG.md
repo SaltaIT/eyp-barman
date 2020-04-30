@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 0.2.14
+
+* added report for **barman check**
+
 # 0.2.13
 
 * added **psycopg2** to the barman installation
