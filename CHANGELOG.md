@@ -1,5 +1,9 @@
 # CHANGELOG
 
+# 0.2.16
+
+* bugfix barman server report
+
 # 0.2.15
 
 * changed return code for the barman server report
