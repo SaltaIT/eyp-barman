@@ -21,12 +21,12 @@ class barman::nagios(
     content => file("${module_name}/nagios/check_barman_backups.sh"),
   }
 
-  file { "${basedir}/report_barman_backups":
+  file { "${basedir}/report_barman_servers":
     ensure  => 'present',
     owner   => 'root',
     group   => 'root',
     mode    => '0755',
-    content => file("${module_name}/nagios/report_barman_backups.sh"),
+    content => file("${module_name}/nagios/report_barman_servers.sh"),
   }
 
   # compatibility

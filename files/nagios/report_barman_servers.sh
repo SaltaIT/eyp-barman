@@ -43,7 +43,7 @@ barman list-server > /dev/null 2>&1
 if [ $? -ne 0 ];
 then
   echo "ERROR getting list of servers"
-  exit 2
+  exit 3
 fi
 
 RETCODE=0
